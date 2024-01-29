@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "377133155577",
+    "project_id": "bbibic-e61ab",
+    "storage_bucket": "bbibic-e61ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377133155577:android:93931a6f18964798960e28",
+        "android_client_info": {
+          "package_name": "com.bbibic.store.bbibic_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAamcz49IZAbJhFuIMDzPNf3nHsEtW6GGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
