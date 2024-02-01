@@ -23,7 +23,6 @@ class NetworkProvider with ChangeNotifier {
         fontSize: AppTextStyles.B1,
       );
     }
-    Logger().i("인터넷 연결 : $isConnected");
     notifyListeners();
     return isConnected;
   }

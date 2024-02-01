@@ -1,15 +1,21 @@
 
+import 'package:bbibic_store/configs/router/route_names.dart';
+import 'package:bbibic_store/models/goods.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
-import 'package:bbibic_store/screens/add_goods/widgets/PhotoListWidget.dart';
-import 'package:bbibic_store/screens/add_goods/widgets/category_widget.dart';
+import 'package:bbibic_store/screens/admin/add_goods/widgets/category_widget.dart';
+import 'package:bbibic_store/screens/admin/add_goods/widgets/detail_image_widget.dart';
+import 'package:bbibic_store/screens/admin/add_goods/widgets/thumbnail_widget.dart';
 import 'package:bbibic_store/theme/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../providers/category_provider.dart';
-import '../../theme/app_decorations.dart';
-import '../../theme/app_text_styles.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../providers/category_provider.dart';
+import '../../../providers/goods_provider.dart';
+import '../../../theme/app_decorations.dart';
+import '../../../theme/app_text_styles.dart';
+import '../../../util/date_util.dart';
+import '../../widgets/my_app_bar.dart';
 
 class AddGoodsScreen extends StatefulWidget {
   const AddGoodsScreen({Key? key}) : super(key: key);
@@ -32,6 +38,7 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
     final photoProvider = Provider.of<PhotoProvider>(context);
+    final goodsProvider = Provider.of<GoodsProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -46,23 +53,42 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PhotoListWidget(),
+                      const ThumbnailWidget(),
+                      const DetailImageWidget(),
+                      photoRemoveInfoHelper(),
                       _nameHelper(),
                       _priceHelper(),
-                      CategoryWidget(),
+                      const CategoryWidget(),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(8),
                 child: Container(
                   height: 48,
                   width: double.infinity,
                   decoration: AppDecorations.buttonDecoration(AppColors.black),
                   child: MaterialButton(
-                    onPressed: (){},
+                    onPressed: () async{
+                      await goodsProvider.add(
+                        context,
+                        Goods(
+                          categoryId: categoryProvider.selectedCategoryList,
+                          goodsName: controllerName.text,
+                          goodsPrice: int.tryParse(controllerPrice.text) ?? 0,
+                          status: true,
+                          goodsSell: 0,
+                          views: 0,
+                          createdDate: DateUtil.getToday(),
+                          thumbnailImages: [],
+                          detailImages: [],
+                        ),
+                        photoProvider.thumbnailList, photoProvider.detailList,
+                      );
+                    },
                     child: Text("상품 추가하기",style: AppTextStyles.whiteColorB1),
                   ),
                 ),
@@ -75,6 +101,26 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
     );
   }
 
+
+  Widget photoRemoveInfoHelper() {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.info_outline,
+            size: 16,
+            color: AppColors.grey600,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "추가한 사진은 터치해서 삭제할 수 있어요!",
+            style: AppTextStyles.grey600ColorB2,
+          ),
+        ],
+      ),
+    );
+  }
   Widget _nameHelper() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -85,7 +131,7 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
           SizedBox(height: 12),
           TextField(
             decoration:
-            InputDecoration(hintText: "고객한테 보여질 이름을 입력해주세요.", hintStyle: AppTextStyles.grey600ColorB1),
+            InputDecoration(hintText: "상품 이름을 입력해주세요.", hintStyle: AppTextStyles.grey600ColorB1),
             style: AppTextStyles.blackColorB1,
             showCursor: true,
             controller: controllerName,

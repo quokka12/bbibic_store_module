@@ -22,12 +22,14 @@ class AppDecorations {
       borderRadius: BorderRadius.circular(8),
     );
   }
-
   static BoxDecoration selectedTagDecoration() {
     return BoxDecoration(
       color: Colors.white,
       border: Border.all(color: AppColors.black, width: 1),
       borderRadius: BorderRadius.circular(8),
     );
+  }
+  static BoxDecoration selectedTabBar(){
+    return BoxDecoration(border: Border(bottom: BorderSide(width: 2, color: AppColors.black)));
   }
 }

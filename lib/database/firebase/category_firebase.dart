@@ -28,7 +28,7 @@ class CategoryFirebase{
         // TODO : 저장성공 시 행동
         isSuccessed = true;
       }).onError((error, stackTrace) {
-        Logger().i("데이터베이스 저장 실패! \n $error");
+        Logger().e("데이터베이스 저장 실패! \n $error");
       });
     } catch (e) {
       Logger().e(e);
@@ -45,6 +45,7 @@ class CategoryFirebase{
     try {
       // 인터넷 상태 확인
       if (!isNetwork) return categoryList;
+
       await collectionReference.get().then(
         (querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {

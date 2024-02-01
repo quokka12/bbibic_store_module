@@ -25,6 +25,15 @@ class CameraPakage {
     return imgs;
   }
 
+  static Future<List<File>> getImagesNoCrop(List<File?> images) async {
+    final images = await ImagePicker().pickMultiImage();
+    List<File> imgs = [];
+    for (XFile image in images) {
+      imgs.add(File(image.path));
+    }
+    return imgs;
+  }
+
   static Future cropImage(File imageFile) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
@@ -39,7 +48,7 @@ class CameraPakage {
     for (File? image in images) {
       CroppedFile? croppedImage = await ImageCropper().cropImage(
         sourcePath: image!.path,
-        aspectRatio: CropAspectRatio(ratioX: 4, ratioY: 3),
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       );
       croppedImages.add(File(croppedImage!.path));
     }

@@ -7,17 +7,12 @@ import '../models/category.dart';
 class CategoryProvider with ChangeNotifier {
   List<String> selectedCategoryList = [];
   List<String> categoryList = [];
-  void refresh(List<String> category){
-    categoryList = category;
-    notifyListeners();
-  }
-  Future addCategory(BuildContext context, String name) async {
+  Future add(BuildContext context, String name) async {
     Category category = Category(name : name);
     bool isSuccess = await CategoryFirebase.add(context, category);
     notifyListeners();
-    return isSuccess;
   }
-  Future<bool> deletedCategory(BuildContext context, String name) async {
+  Future<bool> deleted(BuildContext context, String name) async {
     bool isSuccess = await CategoryFirebase.delete(context, name)!;
     notifyListeners();
     return isSuccess;
@@ -25,12 +20,17 @@ class CategoryProvider with ChangeNotifier {
   void selectTag(tagName) {
     if(selectedCategoryList.length <4){
       selectedCategoryList.add(tagName);
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   void unselectTag(tagName) {
     selectedCategoryList.remove(tagName);
+    notifyListeners();
+  }
+
+  void refresh(List<String> category){
+    categoryList = category;
     notifyListeners();
   }
 

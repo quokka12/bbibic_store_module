@@ -5,10 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../database/firebase/category_firebase.dart';
-import '../../../providers/category_provider.dart';
-import '../../../theme/app_decorations.dart';
-import '../../../theme/app_text_styles.dart';
+import '../../../../database/firebase/category_firebase.dart';
+import '../../../../providers/category_provider.dart';
+import '../../../../theme/app_decorations.dart';
+import '../../../../theme/app_text_styles.dart';
+
 
 class CategoryWidget extends StatefulWidget {
   const CategoryWidget({super.key});
@@ -35,7 +36,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                 Text("카테고리",style: AppTextStyles.blackColorH2Bold),
                 GestureDetector(
                   onTap: () =>context.pushNamed(RouteNames.categoryManagement),
-                  child: Text("카테고리 관리",style: AppTextStyles.underlineBlue),
+                  child: Text("카테고리 관리",style: AppTextStyles.underline),
                 )
               ],
             ),
@@ -52,20 +53,38 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   }
 
   Widget _categoryList(BuildContext context, CategoryProvider categoryProvider) {
-    return Wrap(
-      direction: Axis.horizontal,
-      alignment: WrapAlignment.start,
-      spacing: 4,
-      runSpacing: 4,
-      children: [
-        for(int i =0; i<categoryProvider.categoryList!.length;i++)
-          _categoryCard(categoryProvider.categoryList[i],categoryProvider),
-      ],
+    return FutureBuilder<List<String>>(
+      future: CategoryFirebase.getData(context),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(height: 1000); // 데이터 로딩 중에 보여줄 위젯
+        } else if (snapshot.hasError) {
+          Fluttertoast.showToast(
+            msg: "데이터를 불러올 수 없습니다. 다시 시도해주세요.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            fontSize: AppTextStyles.B1,
+          );
+          return SizedBox(); // 에러 발생 시 보여줄 위젯
+        } else {
+          List<String>? categoryList = snapshot.data; // List<String> 형태의 데이터 추출
+          // 추출한 데이터를 활용하여 UI를 구성하거나 다른 작업을 수행할 수 있습니다.
+          return Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              for(int i = 0; i<categoryList!.length;i++)
+                _categoryCard(categoryList[i], categoryProvider),
+            ],
+          );
+        }
+      },
     );
   }
 
   Widget _categoryCard(String name, CategoryProvider categoryProvider) {
-
     return Padding(
       padding: const EdgeInsets.all(6),
       child: InkWell(

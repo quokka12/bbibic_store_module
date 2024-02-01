@@ -12,7 +12,7 @@ class AddGoodsAppBar extends StatelessWidget {
       alignment: Alignment.centerLeft,
       height: 56,
       child: GestureDetector(
-        onTap: ()=>context.pop(),
+        onTap: () => context.pop(),
         child: Icon(Icons.arrow_back_ios_rounded,size: 24),
       )
     );

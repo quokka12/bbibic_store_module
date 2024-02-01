@@ -5,12 +5,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/firebase/category_firebase.dart';
-import '../../providers/category_provider.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_decorations.dart';
-import '../../theme/app_text_styles.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../database/firebase/category_firebase.dart';
+import '../../../providers/category_provider.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_decorations.dart';
+import '../../../theme/app_text_styles.dart';
+import '../../widgets/my_app_bar.dart';
 
 class CategoryManagementScreen extends StatefulWidget {
   const CategoryManagementScreen({Key? key}) : super(key: key);
@@ -93,7 +93,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                           fontSize: AppTextStyles.B1,
                         );
                       }else{
-                        categoryProvider.addCategory(context, categoryNameController.text);
+                        categoryProvider.add(context, categoryNameController.text);
                         categoryNameController.clear();
                       }
                     },
@@ -142,8 +142,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           return Wrap(
             direction: Axis.horizontal,
             alignment: WrapAlignment.start,
-            spacing: 4,
-            runSpacing: 4,
+            spacing: 12,
+            runSpacing: 12,
             children: [
               for(int i =0; i<categoryList!.length;i++)
                 _categoryCard(categoryList[i], categoryProvider),

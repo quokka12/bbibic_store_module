@@ -7,9 +7,10 @@
     <uses-permission android:name="android.permission.android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MEMORY" />
     <application
-        android:label="bbibic_store"
+        android:label="삐빅 스토어"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true" >
         <activity
             android:name=".MainActivity"
             android:exported="true"
