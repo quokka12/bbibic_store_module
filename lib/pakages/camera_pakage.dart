@@ -6,10 +6,18 @@ import 'package:image_picker/image_picker.dart';
 class CameraPakage {
   CameraPakage._();
 
-  static Future<File?> getImage(List<File?> images) async {
+  static Future<File?> getImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     File? img = File(image!.path);
     img = await cropImage(img);
+    if (img != null) {
+      return img;
+    }
+  }
+
+  static Future<File?> getImageNoCrop() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    File? img = File(image!.path);
     if (img != null) {
       return img;
     }

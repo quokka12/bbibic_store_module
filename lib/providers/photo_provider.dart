@@ -18,6 +18,8 @@ class PhotoProvider with ChangeNotifier {
     detailList.addAll((await CameraPakage.getImagesNoCrop(detailList)));
     notifyListeners();
   }
+
+
   void removeThumbnail(int index) {
     thumbnailList.removeAt(index);
     notifyListeners();

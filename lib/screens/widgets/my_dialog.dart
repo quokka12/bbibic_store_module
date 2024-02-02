@@ -1,3 +1,4 @@
+import 'package:bbibic_store/providers/banner_provider.dart';
 import 'package:bbibic_store/providers/category_provider.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/theme/app_colors.dart';
@@ -198,9 +199,80 @@ class MyDialog{
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
-                              goodsProvider.deleted(
+                              goodsProvider.delete(
                                 context1,
                                 goods
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.bbibic,
+                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(10)),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text("삭제", style: AppTextStyles.whiteColorB1),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  static void bannerDeleteDialog(BuildContext context1,BannerProvider bannerProvider, String bannerId) {
+    showDialog(
+      context: context1,
+      barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
+      builder: ((context) {
+        return Dialog(
+          child: Container(
+            width: 300,
+            height: 148,
+            padding: EdgeInsets.only(top: 20),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 8),
+                      Text("해당 배너를 삭제하시겠습니까?", style: AppTextStyles.blackColorB1)
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.grey200,
+                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10)),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text('취소', style: AppTextStyles.blackColorB1),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              bannerProvider.delete(
+                                  context1,
+                                  bannerId,
                               );
                             },
                             child: Container(

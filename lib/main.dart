@@ -1,3 +1,4 @@
+import 'package:bbibic_store/providers/banner_provider.dart';
 import 'package:bbibic_store/providers/category_provider.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/providers/network_provider.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => NetworkProvider()),
         ChangeNotifierProvider(create: (context) => GoodsProvider()),
         ChangeNotifierProvider(create: (context) => GoodsDetailTabBarViewModel()),
+        ChangeNotifierProvider(create: (context) => BannerProvider()),
       ],
       child: MaterialApp.router(
         theme: AppThemes.mainTheme(),

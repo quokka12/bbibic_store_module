@@ -29,7 +29,6 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
           backgroundColor: AppColors.backgroundColor,
           body: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 MyAppBar.basicAppBar(context, '상품 관리', null),
                 Expanded(
@@ -49,6 +48,7 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
                                   children: [
                                     for (int i = 0; i < 5; i++) ...[
                                       Container(
+                                        width: double.infinity,
                                         padding: const EdgeInsets.all(12),
                                         decoration: AppDecorations.buttonDecoration(Colors.white),
                                         child: Shimmer.fromColors(
@@ -59,8 +59,8 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
                                             runSpacing: 12,
                                             children: [
                                               Container(
-                                                width: 150,
-                                                height: 150,
+                                                width: 100,
+                                                height: 100,
                                                 decoration: BoxDecoration(
                                                   color: Colors.black,
                                                   borderRadius: BorderRadius.circular(12),
@@ -71,7 +71,7 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    width: 210,
+                                                    width: 150,
                                                     height: 20,
                                                     decoration: BoxDecoration(
                                                       color: Colors.black,
@@ -132,7 +132,7 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
                                                       borderRadius: BorderRadius.circular(12),
                                                     ),
                                                   ),
-                                                  SizedBox(height: 16),
+                                                  SizedBox(height:58),
                                                 ],
                                               ),
                                             ],
@@ -157,7 +157,7 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
                               }
                               // TODO: 받아온 데이터를 활용한 UI 구성 및 반환 처리
                               return AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 1000),
+                                duration: const Duration(milliseconds: 100),
                                 child: Container(
                                   width: double.infinity,
                                   child: Column(

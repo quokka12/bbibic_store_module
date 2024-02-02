@@ -135,8 +135,9 @@ class MyInfoScreen extends StatelessWidget {
             children: [
               TextButton(onPressed: () => context.pushNamed(RouteNames.goodsManagement), child: Text("상품 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () => context.pushNamed(RouteNames.categoryManagement), child: Text("카테고리 관리",style: AppTextStyles.blackColorB1Bold)),
-              TextButton(onPressed: (){}, child: Text("주문 관리",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () {}, child: Text("주문 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: (){}, child: Text("서비스 문의 관리",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.bannerManagement), child: Text("배너 관리",style: AppTextStyles.blackColorB1Bold)),
             ],
           ),
         ),

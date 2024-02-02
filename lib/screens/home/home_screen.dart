@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:another_carousel_pro/another_carousel_pro.dart';
+import 'package:bbibic_store/database/firebase/banner_firebase.dart';
 import 'package:bbibic_store/database/firebase/goods_firebase.dart';
+import 'package:bbibic_store/models/ad_banner.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               homeAppBar(),
-              bannerHelper(),
+              firebaseBannerHelper(),
               SizedBox(height: 20),
               homeMenuHelper(),
               SizedBox(height: 20),
@@ -193,51 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-
-  Widget bannerHelper() {
-    return FutureBuilder(
-        future: Future.delayed(const Duration(seconds: 1)),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: AppSizes.ratioOfHorizontal(context, 1) / 3,
-                  child: AnotherCarousel(
-                    dotSize: 0,
-                    dotBgColor: Colors.transparent,
-                    images: [
-                      Image.asset(
-                        AppAssets.imageBanner2,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                      ),
-                      Image.asset(
-                        AppAssets.imageBanner3,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                      ),
-                      Image.asset(
-                        AppAssets.imageBanner4,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                      ),
-                    ],
-                  ),
-                ));
-          }
-          return Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
-            child: Container(
-              width: double.infinity,
-              height: AppSizes.ratioOfHorizontal(context, 1) / 3,
-              decoration: const BoxDecoration(color: Colors.black),
-            ),
-          );
-        });
   }
 
   Widget homeMenuHelper() {
@@ -365,6 +323,63 @@ class _HomeScreenState extends State<HomeScreen> {
             }),
       ],
     );
+  }
+
+  Widget firebaseBannerHelper() {
+    return FutureBuilder(
+        future: BannerFirebase.getData(context),
+        builder: (BuildContext context, AsyncSnapshot<List<AdBanner>> snapshot) {
+          List<AdBanner>? bannerList = snapshot.data;
+          if (snapshot.connectionState == ConnectionState.done) {
+            return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 100),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+                  child: AnotherCarousel(
+                    dotSize: 0,
+                    dotBgColor: Colors.transparent,
+                    images: [
+                      for(int i=0; i < bannerList!.length ;i++)...[
+                        Image.network(
+                          bannerList[i].image,
+                          width: double.infinity,
+                          height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+                          fit: BoxFit.fill,
+                          loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if(loadingProgress == null){
+                              return child;
+                            }
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child:
+                              Container(
+                                width: 150,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ]
+                    ],
+                  ),
+                ));
+          }
+          return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              width: double.infinity,
+              height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+              decoration: const BoxDecoration(color: Colors.black),
+            ),
+          );
+        });
   }
 
   Widget firebaseGoodsListHelper(String title,GoodsProvider goodsProvider) {

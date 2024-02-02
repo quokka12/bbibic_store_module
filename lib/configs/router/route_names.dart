@@ -9,7 +9,9 @@ class RouteNames{
 
 
   /* admin */
-  static const goodsManagement= 'goodsManagement';
-  static const addGoods= 'addGoods';
-  static const categoryManagement= 'categoryManagement';
+  static const goodsManagement = 'goodsManagement';
+  static const categoryManagement = 'categoryManagement';
+  static const bannerManagement = 'bannerManagement';
+  static const addGoods = 'addGoods';
+  static const addBanner = 'addBanner';
 }

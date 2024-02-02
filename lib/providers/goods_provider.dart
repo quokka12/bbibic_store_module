@@ -29,7 +29,7 @@ class GoodsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future deleted(BuildContext context, Goods goods) async {
+  Future delete(BuildContext context, Goods goods) async {
     AppLoadingBar.deleteDataLoading(context);
     bool isSuccess = await GoodsFirebase.delete(context, goods)!;
     context.pop();
