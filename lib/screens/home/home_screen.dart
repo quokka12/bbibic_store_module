@@ -54,71 +54,33 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "종근당건강 아이클리어 루테인 지아잔틴",
       "price": 4800
     },
-    {"image": "assets/images/test4.jpg", "title": "오쏘몰 이뮨", "price": 69750},
-    {
-      "image": "assets/images/test5.jpg",
-      "title": "에버그린 멀티비타민 앤 미네랄",
-      "price": 29700
-    },
-    {
-      "image": "assets/images/test6.jpg",
-      "title": "종근당건강 프로메가 알티지 오메가3 듀얼",
-      "price": 7550
-    },
-    {
-      "image": "assets/images/test7.jpg",
-      "title": "고려은단비타민C1000",
-      "price": 42000
-    },
-    {
-      "image": "assets/images/test8.jpg",
-      "title": "주영엔에스 관절엔 콘드로이친 1200",
-      "price": 50250
-    },
-  ];
-
-  List<Map> newGoodsList = [
-    {
-      "image": "assets/images/test8.jpg",
-      "title": "주영엔에스 관절엔 콘드로이친 1200",
-      "price": 50250
-    },
-    {
-      "image": "assets/images/test7.jpg",
-      "title": "고려은단비타민C1000",
-      "price": 42000
-    },
-    {
-      "image": "assets/images/test6.jpg",
-      "title": "종근당건강 프로메가 알티지 오메가3 듀얼",
-      "price": 7550
-    },
-    {
-      "image": "assets/images/test5.jpg",
-      "title": "에버그린 멀티비타민 앤 미네랄",
-      "price": 29700
-    },
-    {
-      "image": "assets/images/test1.jpg",
-      "title": "덴프스 덴마크 유산균 이야기",
-      "price": 26180
-    },
-    {
-      "image": "assets/images/test2.jpg",
-      "title": "콴첼 뮤코다당단백 콘드로이친 플러스",
-      "price": 22000
-    },
-    {
-      "image": "assets/images/test3.jpg",
-      "title": "종근당건강 아이클리어 루테인 지아잔틴",
-      "price": 4800
-    },
     {
       "image": "assets/images/test4.jpg",
       "title": "오쏘몰 이뮨",
       "price": 69750,
     },
+    {
+      "image": "assets/images/test5.jpg",
+      "title": "에버그린 멀티비타민 앤 미네랄",
+      "price": 29700
+    },
+    {
+      "image": "assets/images/test6.jpg",
+      "title": "종근당건강 프로메가 알티지 오메가3 듀얼",
+      "price": 7550
+    },
+    {
+      "image": "assets/images/test7.jpg",
+      "title": "고려은단비타민C1000",
+      "price": 42000
+    },
+    {
+      "image": "assets/images/test8.jpg",
+      "title": "주영엔에스 관절엔 콘드로이친 1200",
+      "price": 50250,
+    },
   ];
+
   @override
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
@@ -129,13 +91,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               homeAppBar(),
               firebaseBannerHelper(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               homeMenuHelper(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               firebaseGoodsListHelper("삐빅샵 새로 나온 상품", goodsProvider),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               goodsListHelper("삐빅샵 인기상품", popularGoodsList),
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
             ],
           ),
         ),
@@ -145,16 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget homeAppBar() {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
       height: 56,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.only(right: 8.0),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 alignment: Alignment.center,
                 height: 40,
                 decoration: BoxDecoration(
@@ -169,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.grey600ColorC1,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.search_rounded,
                       size: 24,
                       color: AppColors.grey800,
@@ -179,17 +141,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Row(
             children: [
               GestureDetector(
                 onTap: () { },
-                child: Icon(Icons.shopping_cart, size: 24),
+                child: const Icon(Icons.shopping_cart, size: 24),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               GestureDetector(
                 onTap: ()=> context.goNamed(RouteNames.myInfo),
-                child: Icon(Icons.person, size: 24),
+                child: const Icon(Icons.person, size: 24),
               ),
             ],
           )
@@ -210,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 42,
                   fit: BoxFit.contain,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   menuList[i]["title"],
                   style: AppTextStyles.blackColorB2,
@@ -227,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const SizedBox(height: 20),
         Container(
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20),
           alignment: Alignment.bottomLeft,
           child: Text(title, style: AppTextStyles.blackColorH2Bold),
         ),
@@ -242,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         for (int i = 0; i < goodsList.length; i++) ...[
                           Container(
                             width: 160,
@@ -266,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                         ]
                       ],
                     ),
@@ -280,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       for (int i = 0; i < 10; i++) ...[
                         Container(
                           child: Column(
@@ -293,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Container(
                                 width: 160,
                                 height: 20,
@@ -302,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Container(
                                 width: 80,
                                 height: 20,
@@ -314,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                       ]
                     ],
                   ),
@@ -387,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
         const SizedBox(height: 20),
         Container(
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20),
           alignment: Alignment.bottomLeft,
           child: Text(title, style: AppTextStyles.blackColorH2Bold),
         ),
@@ -404,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       for (int i = 0; i < 10; i++) ...[
                         Container(
                           child: Column(
@@ -417,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Container(
                                 width: 160,
                                 height: 20,
@@ -426,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Container(
                                 width: 80,
                                 height: 20,
@@ -438,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                       ],
                     ],
                   ),
@@ -466,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       for (int i = 0; i < goodsList!.length; i++) ...[
                         GestureDetector(
                       onTap : (){
@@ -513,7 +475,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                       ]
                     ],
                   ),
@@ -527,7 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     for (int i = 0; i < 10; i++) ...[
                       Container(
                         child: Column(
@@ -540,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Container(
                               width: 160,
                               height: 20,
@@ -549,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Container(
                               width: 80,
                               height: 20,
@@ -561,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                     ],
                   ],
                 ),

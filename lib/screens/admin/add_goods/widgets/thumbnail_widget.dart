@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bbibic_store/screens/admin/components/photo_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../providers/photo_provider.dart';
@@ -14,19 +15,19 @@ class ThumbnailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final photoProvider = Provider.of<PhotoProvider>(context);
     return Padding(
-        padding: EdgeInsets.only(left: 12,top: 20),
+        padding: const EdgeInsets.only(left: 12,top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("썸네일 이미지",style: AppTextStyles.blackColorH2Bold),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Column(
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       for (int i = 0; i < photoProvider.thumbnailList.length; i++)
                         GestureDetector(
                           onTap: () {
@@ -56,7 +57,7 @@ class ThumbnailWidget extends StatelessWidget {
                               }),
                             );
                           },
-                          child: imageHelper(photoProvider.thumbnailList[i]),
+                          child: PhotoComponent.imageHelper(photoProvider.thumbnailList[i]),
                         ),
                       InkWell(
                         onTap: () => photoProvider.addThumbnail(),
@@ -68,7 +69,7 @@ class ThumbnailWidget extends StatelessWidget {
                           child: const Icon(Icons.add, size: 24, color: AppColors.black),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                     ],
                   ),
                 ),
@@ -79,14 +80,4 @@ class ThumbnailWidget extends StatelessWidget {
     );
   }
 
-  Widget imageHelper(url) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12.0),
-      child: SizedBox(
-        height: 150,
-        width: 150,
-        child: Image.file(File(url!.path), fit: BoxFit.fill),
-      ),
-    );
-  }
 }

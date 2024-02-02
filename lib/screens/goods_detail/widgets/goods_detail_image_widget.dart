@@ -30,7 +30,7 @@ class GoodsDetailImageWidget extends StatelessWidget {
                       Container(
                         width: double.infinity,
                         height: 1000,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.black,
                         ),
                       ),

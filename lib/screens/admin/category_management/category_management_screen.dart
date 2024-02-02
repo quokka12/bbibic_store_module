@@ -28,6 +28,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     super.dispose();
     categoryNameController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
@@ -122,6 +123,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       ),
     );
   }
+
   Widget _categoryList(CategoryProvider categoryProvider) {
     return FutureBuilder<List<String>>(
       future: CategoryFirebase.getData(context),

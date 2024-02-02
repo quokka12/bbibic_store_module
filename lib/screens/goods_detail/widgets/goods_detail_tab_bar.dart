@@ -18,7 +18,7 @@ class GoodsDetailTabBar extends StatelessWidget {
       children: [
         _tabBar(goodsDetailTabBarViewModel),
         goodsDetailTabBarViewModel.firstPage ?
-            GoodsDetailImageWidget():
+            const GoodsDetailImageWidget():
             SizedBox(
               height: AppSizes.ratioOfVertical(context, 1) - 200,
               child: Column(

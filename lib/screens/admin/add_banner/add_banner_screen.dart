@@ -11,7 +11,7 @@ import '../../../theme/app_text_styles.dart';
 import '../../widgets/my_app_bar.dart';
 
 class AddBannerScreen extends StatelessWidget {
-  const AddBannerScreen({Key? key}) : super(key: key);
+  const AddBannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,14 @@ class AddBannerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            MyAppBar.basicAppBar(context,"배너 추가",(){
-              bannerProvider.clear();
-              Navigator.pop(context);
-            }),
+            MyAppBar.basicAppBar(
+              context,
+              "배너 추가",
+              (){
+                bannerProvider.clear();
+                Navigator.pop(context);
+              }
+            ),
             const Expanded( child: BannerImageWidget()),
             Padding(
               padding: const EdgeInsets.all(8),
@@ -32,9 +36,7 @@ class AddBannerScreen extends StatelessWidget {
                 width: double.infinity,
                 decoration: AppDecorations.buttonDecoration(AppColors.black),
                 child: MaterialButton(
-                  onPressed: () async{
-                    bannerProvider.add(context);
-                  },
+                  onPressed: () async => bannerProvider.add(context),
                   child: Text("배너 추가하기",style: AppTextStyles.whiteColorB1),
                 ),
               ),

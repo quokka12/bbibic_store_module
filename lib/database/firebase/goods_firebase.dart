@@ -102,7 +102,6 @@ class GoodsFirebase {
               return Goods(status: true);
             }
             final data = docSnapshot.data();
-            Logger().i(data);
             goodsList.add(Goods.fromMap(data));
           }
 

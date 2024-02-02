@@ -14,19 +14,19 @@ class DetailImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final photoProvider = Provider.of<PhotoProvider>(context);
     return Padding(
-        padding: EdgeInsets.only(left: 12,top: 20),
+        padding: const EdgeInsets.only(left: 12,top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("상세정보 이미지",style: AppTextStyles.blackColorH2Bold),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Column(
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       for (int i = 0; i < photoProvider.detailList.length; i++)
                         GestureDetector(
                           onTap: () {
@@ -68,7 +68,7 @@ class DetailImageWidget extends StatelessWidget {
                           child: const Icon(Icons.add, size: 24, color: AppColors.black),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                     ],
                   ),
                 ),
@@ -89,6 +89,7 @@ class DetailImageWidget extends StatelessWidget {
       ),
     );
   }
+
   Widget photoRemoveInfoHelper() {
     return  Row(
       children: [

@@ -27,132 +27,115 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
-    Logger().i(goodsProvider.goods.categoryId);
+    final goodsProvider = Provider.of<GoodsProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
             children: [
-              MyAppBar.basicAppBar(context, "상품 상세정보", () {
-                goodsProvider.clear();
-                Navigator.pop(context);
-              }),
+              MyAppBar.basicAppBar(
+                context,
+                "상품 상세정보",
+                () {
+                  goodsProvider.clear();
+                  Navigator.pop(context);
+                }
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
-                        width: AppSizes.ratioOfHorizontal(context, 1),
-                        height: AppSizes.ratioOfHorizontal(context, 1),
-                        child: AnotherCarousel(
-                          autoplay: false,
-                          dotSize: 8,
-                          dotColor: AppColors.grey300,
-                          dotIncreasedColor : AppColors.bbibic,
-                          dotBgColor: Colors.transparent,
-                          images: [
-                            if(goodsProvider.goods.thumbnailImages != null)...[
-                              for(int i = 0; i< goodsProvider.goods.thumbnailImages!.length;i++)
-                                Image.network(
-                                  goodsProvider.goods.thumbnailImages![i],
-                                  fit: BoxFit.fill,
-                                  loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
-                                    if(loadingProgress == null){
-                                      return child;
-                                    }
-                                    return Shimmer.fromColors(
-                                      baseColor: Colors.grey.shade300,
-                                      highlightColor: Colors.grey.shade100,
-                                      child:
-                                      Container(
-                                        width: AppSizes.ratioOfHorizontal(context, 1),
-                                        height: AppSizes.ratioOfHorizontal(context, 1),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                            ]
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left:20,top: 20),
-                        alignment: Alignment.centerLeft,
-                          child: Text(
-                            "${goodsProvider.goods.goodsName}",
-                            style: AppTextStyles.blackColorH2Bold,
-                          ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(right: 20),
-                        alignment: Alignment.centerRight,
-                        child:
-                          Text("${goodsProvider.goods.goodsPrice} 원",style: AppTextStyles.blackColorS1,),
-                      ),
-                      Padding(
-                         padding: const EdgeInsets.only(left: 20,top: 12),
-                         child: Row(
-                           children: [
-                             Text("관련태그",style: AppTextStyles.blackColorS2Bold),
-                             SizedBox(width: 20),
-                             Expanded(
-                               child: SingleChildScrollView(
-                                 scrollDirection: Axis.horizontal,
-                                 child: Row(
-                                   children: [
-                                     if(goodsProvider.goods.categoryId != null)...[
-                                       for(int i=0; i < goodsProvider.goods.categoryId!.length; i++)...[
-                                         _categoryCard(goodsProvider.goods.categoryId![i])
-                                       ]
-                                     ]
-                                   ],
-                                 ),
-                               ),
-                             )
-                           ],
-                         ),
-                      ),
+                      _goodsInfoHelper(goodsProvider),
                       const SizedBox(height: 12),
-                      GoodsDetailTabBar(),
+                      const GoodsDetailTabBar(),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child:Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 48,
-                        decoration: AppDecorations.buttonDecoration(AppColors.bbibic),
-                        child: MaterialButton(
-                          onPressed: (){
-                          },
-                          child: Text("구매하기",style: AppTextStyles.whiteColorB1),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Container(
-                      height: 48,
-                      decoration: AppDecorations.buttonDecoration(AppColors.black),
-                      child: MaterialButton(
-                        onPressed: (){
-                        },
-                        child: Text("장바구니",style: AppTextStyles.whiteColorB1),
-                      ),
-                    ),
-                  ],
-                )
-              ),
-
+              _buttonHelper(),
             ]
         ),
       ),
+    );
+  }
+
+  Widget _goodsInfoHelper(GoodsProvider goodsProvider){
+    return Column(
+      children: [
+        SizedBox(
+          width: AppSizes.ratioOfHorizontal(context, 1),
+          height: AppSizes.ratioOfHorizontal(context, 1),
+          child: AnotherCarousel(
+            autoplay: false,
+            dotSize: 8,
+            dotColor: AppColors.grey300,
+            dotIncreasedColor : AppColors.bbibic,
+            dotBgColor: Colors.transparent,
+            images: [
+              if(goodsProvider.goods.thumbnailImages != null)...[
+                for(int i = 0; i< goodsProvider.goods.thumbnailImages!.length;i++)
+                  Image.network(
+                    goodsProvider.goods.thumbnailImages![i],
+                    fit: BoxFit.fill,
+                    loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
+                      if(loadingProgress == null){
+                        return child;
+                      }
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child:
+                        Container(
+                          width: AppSizes.ratioOfHorizontal(context, 1),
+                          height: AppSizes.ratioOfHorizontal(context, 1),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ]
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left:20,top: 20),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${goodsProvider.goods.goodsName}",
+            style: AppTextStyles.blackColorH2Bold,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(right: 20),
+          alignment: Alignment.centerRight,
+          child:
+          Text("${goodsProvider.goods.goodsPrice} 원",style: AppTextStyles.blackColorS1,),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20,top: 12),
+          child: Row(
+            children: [
+              Text("관련태그",style: AppTextStyles.blackColorS2Bold),
+              SizedBox(width: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      if(goodsProvider.goods.categoryId != null)...[
+                        for(int i=0; i < goodsProvider.goods.categoryId!.length; i++)...[
+                          _categoryCard(goodsProvider.goods.categoryId![i])
+                        ]
+                      ]
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -173,5 +156,34 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen> with SingleTicker
     );
   }
 
-
+  Widget _buttonHelper(){
+    return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child:Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 48,
+                decoration: AppDecorations.buttonDecoration(AppColors.bbibic),
+                child: MaterialButton(
+                  onPressed: (){
+                  },
+                  child: Text("구매하기",style: AppTextStyles.whiteColorB1),
+                ),
+              ),
+            ),
+            SizedBox(width: 8),
+            Container(
+              height: 48,
+              decoration: AppDecorations.buttonDecoration(AppColors.black),
+              child: MaterialButton(
+                onPressed: (){
+                },
+                child: Text("장바구니",style: AppTextStyles.whiteColorB1),
+              ),
+            ),
+          ],
+        )
+    );
+  }
 }
