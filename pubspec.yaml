@@ -61,6 +61,8 @@ dependencies:
   intl: ^0.19.0
   firebase_app_check: ^0.2.1+8
   kpostal: ^0.5.1
+  webview_flutter: ^4.5.0
+  webview_flutter_android: ^3.14.0
 
 flutter_icons:
   android: true

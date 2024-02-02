@@ -2,6 +2,7 @@ import 'package:bbibic_store/configs/router/route_names.dart';
 import 'package:bbibic_store/configs/router/screen_transition.dart';
 import 'package:bbibic_store/screens/admin/add_banner/add_banner_screen.dart';
 import 'package:bbibic_store/screens/goods_detail/goods_detail_screen.dart';
+import 'package:bbibic_store/screens/service_web_view/service_center_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../screens/admin/add_goods/add_goods_screen.dart';
@@ -10,6 +11,8 @@ import '../../screens/admin/category_management/category_management_screen.dart'
 import '../../screens/admin/goods_management/goods_management_screen.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/my_info/my_info_screen.dart';
+import '../../screens/service_web_view/privacy_policy_screen.dart';
+import '../../screens/service_web_view/terms_of_use_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -59,7 +62,21 @@ class AppRouter {
                     ),
                   ]
               ),
-
+              GoRoute(
+                name: RouteNames.serviceCenter,
+                path: RouteNames.serviceCenter,
+                builder: (context, state) => const ServiceCenterScreen(),
+              ),
+              GoRoute(
+                name: RouteNames.termOfUser,
+                path: RouteNames.termOfUser,
+                builder: (context, state) => const TermOfUserScreen(),
+              ),
+              GoRoute(
+                name: RouteNames.privacyPolicy,
+                path: RouteNames.privacyPolicy,
+                builder: (context, state) => const PrivacyPolicyScreen(),
+              ),
             ]
           ),
 

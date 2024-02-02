@@ -22,7 +22,7 @@ class MyInfoScreen extends StatelessWidget {
               MyAppBar.basicAppBar(context,"내 정보", null),
               authInfoHelper(),
               serviceInfoHelper(),
-              appInfoHelper(),
+              appInfoHelper(context),
               adminInfoHelper(context),
               Padding(
                 padding: const EdgeInsets.only(top: 4),
@@ -91,7 +91,7 @@ class MyInfoScreen extends StatelessWidget {
     );
   }
 
-  Widget appInfoHelper(){
+  Widget appInfoHelper(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -107,9 +107,9 @@ class MyInfoScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(onPressed: (){}, child: Text("서비스 이용약관",style: AppTextStyles.blackColorB1Bold)),
-              TextButton(onPressed: (){}, child: Text("개인정보처리방침",style: AppTextStyles.blackColorB1Bold)),
-              TextButton(onPressed: (){}, child: Text("고객센터",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.termOfUser), child: Text("서비스 이용약관",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.privacyPolicy), child: Text("개인정보처리방침",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.serviceCenter), child: Text("고객센터",style: AppTextStyles.blackColorB1Bold)),
             ],
           ),
         ),
@@ -136,7 +136,7 @@ class MyInfoScreen extends StatelessWidget {
               TextButton(onPressed: () => context.pushNamed(RouteNames.goodsManagement), child: Text("상품 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () => context.pushNamed(RouteNames.categoryManagement), child: Text("카테고리 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () {}, child: Text("주문 관리",style: AppTextStyles.blackColorB1Bold)),
-              TextButton(onPressed: (){}, child: Text("서비스 문의 관리",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.serviceCenter), child: Text("서비스 문의 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () => context.pushNamed(RouteNames.bannerManagement), child: Text("배너 관리",style: AppTextStyles.blackColorB1Bold)),
             ],
           ),

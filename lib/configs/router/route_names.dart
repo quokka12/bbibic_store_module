@@ -6,6 +6,9 @@ class RouteNames{
   /* common */
   static const goodsDetail= 'goodsDetail';
   static const myInfo= 'myInfo';
+  static const serviceCenter= 'serviceCenter';
+  static const termOfUser= 'termOfUser';
+  static const privacyPolicy= 'privacyPolicy';
 
 
   /* admin */
