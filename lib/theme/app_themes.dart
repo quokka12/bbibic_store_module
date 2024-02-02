@@ -6,7 +6,7 @@ class AppThemes{
   AppThemes._();
   static ThemeData mainTheme() {
     return ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: AppColors.backgroundColor,
       fontFamily: "pretendard",
       visualDensity: VisualDensity.adaptivePlatformDensity,
       inputDecorationTheme: inputDecorationTheme(),

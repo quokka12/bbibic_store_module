@@ -35,6 +35,7 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
     controllerName.dispose();
     controllerPrice.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
@@ -43,6 +44,7 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Column(
             children: [

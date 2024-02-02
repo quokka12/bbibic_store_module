@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bbibic_store/database/firebase/banner_firebase.dart';
 import 'package:bbibic_store/models/ad_banner.dart';
 import 'package:bbibic_store/util/date_util.dart';
+import 'package:bbibic_store/util/toast_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -16,13 +17,26 @@ class BannerProvider with ChangeNotifier {
   File? banner = null;
 
   Future add(BuildContext context) async {
+    //예외처리
+    if(banner == null) {
+      ToastUtil.basic("사진을 추가해주세요");
+      return;
+    }
+
     AppLoadingBar.addDataLoading(context);
+
     AdBanner adBanner = AdBanner(bannerId: '',image: '',startDate: DateUtil.getToday());
     bool isSuccess = await BannerFirebase.add(context, adBanner, banner);
+
     if(isSuccess){
+      if(banner == null) {
+        ToastUtil.basic("저장 완료");
+        return;
+      }
       clear();
       context.goNamed(RouteNames.bannerManagement);
     }
+    
     notifyListeners();
   }
 
@@ -31,12 +45,7 @@ class BannerProvider with ChangeNotifier {
     bool isSuccess = await BannerFirebase.delete(context, bannerId)!;
     context.pop();
     if(isSuccess){
-      Fluttertoast.showToast(
-        msg: "삭제 완료.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        fontSize: AppTextStyles.B1,
-      );
+      ToastUtil.basic("삭제 완료");
       notifyListeners();
     }
     return isSuccess;
@@ -46,9 +55,9 @@ class BannerProvider with ChangeNotifier {
     banner = await CameraPakage.getImageNoCrop();
     notifyListeners();
   }
+
   void clear(){
     banner = null;
     notifyListeners();
   }
-
 }

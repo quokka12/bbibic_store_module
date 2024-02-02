@@ -29,6 +29,7 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen> with SingleTicker
   Widget build(BuildContext context) {
     final goodsProvider = Provider.of<GoodsProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
             children: [

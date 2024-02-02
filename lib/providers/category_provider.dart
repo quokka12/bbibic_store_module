@@ -3,13 +3,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 import '../models/category.dart';
+import '../util/toast_util.dart';
 
 class CategoryProvider with ChangeNotifier {
   List<String> selectedCategoryList = [];
   List<String> categoryList = [];
   Future add(BuildContext context, String name) async {
     Category category = Category(name : name);
+
+    //예외처리
+    if(name == ''){
+      ToastUtil.basic("태그명을 작성해주세요");
+      return;
+    }
     bool isSuccess = await CategoryFirebase.add(context, category);
+    if(isSuccess){
+      ToastUtil.basic("저장 완료");
+    }
     notifyListeners();
   }
   Future<bool> deleted(BuildContext context, String name) async {
@@ -17,6 +27,7 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
     return isSuccess;
   }
+
   void selectTag(tagName) {
     if(selectedCategoryList.length <4){
       selectedCategoryList.add(tagName);

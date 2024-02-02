@@ -3,6 +3,7 @@ import 'package:bbibic_store/providers/category_provider.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/providers/network_provider.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
+import 'package:bbibic_store/theme/app_colors.dart';
 import 'package:bbibic_store/theme/app_themes.dart';
 import 'package:bbibic_store/view_model/goods_detail_tab_bar_view_model.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';

@@ -14,14 +14,13 @@ class MyInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               MyAppBar.basicAppBar(context,"내 정보", null),
-              authInfoHelper(),
-              serviceInfoHelper(),
+              authInfoHelper(context),
+              serviceInfoHelper(context),
               appInfoHelper(context),
               adminInfoHelper(context),
               Padding(
@@ -35,7 +34,8 @@ class MyInfoScreen extends StatelessWidget {
       ),
     );
   }
-  Widget authInfoHelper(){
+
+  Widget authInfoHelper(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,7 +64,7 @@ class MyInfoScreen extends StatelessWidget {
     );
   }
 
-  Widget serviceInfoHelper(){
+  Widget serviceInfoHelper(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,7 +80,7 @@ class MyInfoScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(onPressed: (){}, child: Text("배송지 관리",style: AppTextStyles.blackColorB1Bold),),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.deliveryAddressManagement), child: Text("배송지 관리",style: AppTextStyles.blackColorB1Bold),),
               TextButton(onPressed: (){}, child: Text("구매/배송 목록",style: AppTextStyles.blackColorB1Bold),),
               TextButton(onPressed: (){}, child: Text("찜한 목록",style: AppTextStyles.blackColorB1Bold),),
               TextButton(onPressed: (){}, child: Text("장바구니",style: AppTextStyles.blackColorB1Bold),),
@@ -134,7 +134,7 @@ class MyInfoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(onPressed: () => context.pushNamed(RouteNames.goodsManagement), child: Text("상품 관리",style: AppTextStyles.blackColorB1Bold)),
-              TextButton(onPressed: () => context.pushNamed(RouteNames.categoryManagement), child: Text("카테고리 관리",style: AppTextStyles.blackColorB1Bold)),
+              TextButton(onPressed: () => context.pushNamed(RouteNames.categoryManagement), child: Text("상품 태그 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () {}, child: Text("주문 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () => context.pushNamed(RouteNames.serviceCenter), child: Text("서비스 문의 관리",style: AppTextStyles.blackColorB1Bold)),
               TextButton(onPressed: () => context.pushNamed(RouteNames.bannerManagement), child: Text("배너 관리",style: AppTextStyles.blackColorB1Bold)),

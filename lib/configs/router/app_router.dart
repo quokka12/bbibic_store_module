@@ -1,6 +1,7 @@
 import 'package:bbibic_store/configs/router/route_names.dart';
 import 'package:bbibic_store/configs/router/screen_transition.dart';
 import 'package:bbibic_store/screens/admin/add_banner/add_banner_screen.dart';
+import 'package:bbibic_store/screens/delivery_address_management/delivery_address_management_screen.dart';
 import 'package:bbibic_store/screens/goods_detail/goods_detail_screen.dart';
 import 'package:bbibic_store/screens/service_web_view/service_center_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -76,6 +77,11 @@ class AppRouter {
                 name: RouteNames.privacyPolicy,
                 path: RouteNames.privacyPolicy,
                 builder: (context, state) => const PrivacyPolicyScreen(),
+              ),
+              GoRoute(
+                name: RouteNames.deliveryAddressManagement,
+                path: RouteNames.deliveryAddressManagement,
+                builder: (context, state) => const DeliveryAddressManagementScreen(),
               ),
             ]
           ),

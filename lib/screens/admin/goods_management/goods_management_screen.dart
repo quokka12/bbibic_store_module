@@ -26,7 +26,6 @@ class _GoodsManagementScreenState extends State<GoodsManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          backgroundColor: AppColors.backgroundColor,
           body: SafeArea(
             child: Column(
               children: [

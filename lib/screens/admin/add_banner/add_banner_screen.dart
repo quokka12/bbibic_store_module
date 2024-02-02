@@ -17,6 +17,7 @@ class AddBannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final bannerProvider = Provider.of<BannerProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [

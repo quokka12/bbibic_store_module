@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -317,12 +318,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               highlightColor: Colors.grey.shade100,
                               child:
                               Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                                width: double.infinity,
+                                height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+                                decoration: const BoxDecoration(color: Colors.black),
                               ),
                             );
                           },

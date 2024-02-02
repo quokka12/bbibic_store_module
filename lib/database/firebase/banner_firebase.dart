@@ -64,7 +64,6 @@ class BannerFirebase {
               return AdBanner(bannerId: '',image: '',startDate: '');
             }
             final data = docSnapshot.data();
-            Logger().i(data);
             bannerList.add(AdBanner.fromMap(data));
           }
         },

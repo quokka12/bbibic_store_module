@@ -12,6 +12,7 @@ import '../database/firebase/goods_firebase.dart';
 import '../models/goods.dart';
 import '../screens/widgets/loading_bar.dart';
 import '../theme/app_text_styles.dart';
+import '../util/toast_util.dart';
 import 'category_provider.dart';
 
 class GoodsProvider with ChangeNotifier {
@@ -19,6 +20,25 @@ class GoodsProvider with ChangeNotifier {
 
   Future add(BuildContext context, Goods goods, List<File?> thumbnailImageList,
       List<File?> detailImageList) async {
+
+    //예외처리
+    if(thumbnailImageList.isEmpty || detailImageList.isEmpty){
+      ToastUtil.basic("썸네일 혹은 상세이미지를 추가해주세요");
+      return;
+    }
+    if(goods.goodsName == ''){
+      ToastUtil.basic("이름을 입력해주세요");
+      return;
+    }
+    if(goods.goodsPrice == null || goods.goodsPrice == 0){
+      ToastUtil.basic("가격을 입력해주세요");
+      return;
+    }
+    if(goods.categoryId == null || goods.categoryId!.isEmpty){
+      ToastUtil.basic("태그를 1개 이상 선택해주세요");
+      return;
+    }
+    
     AppLoadingBar.addDataLoading(context);
     bool isSuccess = await GoodsFirebase.add(context, goods, thumbnailImageList, detailImageList);
     if(isSuccess){

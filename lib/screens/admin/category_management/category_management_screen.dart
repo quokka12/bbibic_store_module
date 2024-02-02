@@ -39,7 +39,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MyAppBar.basicAppBar(context,"카테고리 관리", null),
+              MyAppBar.basicAppBar(context,"상품 태그 관리", null),
               _addCategoryHelper(categoryProvider),
               _categoryHelper(categoryProvider),
             ],
@@ -48,14 +48,15 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       ),
     );
   }
+
   Widget _addCategoryHelper(CategoryProvider categoryProvider){
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("카테고리 추가",style: AppTextStyles.blackColorH2Bold),
-          SizedBox(height: 8),
+          Text("상품 태그 추가",style: AppTextStyles.blackColorH2Bold),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -69,7 +70,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                   child: TextField(
                       controller: categoryNameController,
                       decoration: const InputDecoration(
-                        hintText: '추가할 카테고리명을 작성해주세요.',
+                        hintText: '추가할 태그명을 작성해주세요.',
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
@@ -86,17 +87,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                   decoration: AppDecorations.buttonDecoration(AppColors.black),
                   child: MaterialButton(
                     onPressed: (){
-                      if(categoryNameController.text.length < 1){
-                        Fluttertoast.showToast(
-                          msg: "카테고리명을 작성해주세요.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          fontSize: AppTextStyles.B1,
-                        );
-                      }else{
-                        categoryProvider.add(context, categoryNameController.text);
-                        categoryNameController.clear();
-                      }
+                      categoryProvider.add(context, categoryNameController.text);
+                      categoryNameController.clear();
                     },
                     child: Text("추가하기",style: AppTextStyles.whiteColorB1),
                   ),
@@ -115,9 +107,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("카테고리",style: AppTextStyles.blackColorH2Bold),
+          Text("상품 태그",style: AppTextStyles.blackColorH2Bold),
           _categoryRemoveInfoHelper(),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           _categoryList(categoryProvider),
         ],
       ),
@@ -129,7 +121,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       future: CategoryFirebase.getData(context),
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox(); // 데이터 로딩 중에 보여줄 위젯
+          return const SizedBox(); // 데이터 로딩 중에 보여줄 위젯
         } else if (snapshot.hasError) {
           Fluttertoast.showToast(
             msg: "데이터를 불러올 수 없습니다. 다시 시도해주세요.",
@@ -137,7 +129,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             gravity: ToastGravity.CENTER,
             fontSize: AppTextStyles.B1,
           );
-          return SizedBox(); // 에러 발생 시 보여줄 위젯
+          return const SizedBox(); // 에러 발생 시 보여줄 위젯
         } else {
           List<String>? categoryList = snapshot.data; // List<String> 형태의 데이터 추출
           // 추출한 데이터를 활용하여 UI를 구성하거나 다른 작업을 수행할 수 있습니다.
@@ -191,7 +183,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ),
         const SizedBox(width: 4),
         Text(
-          "카테고리는 터치해서 삭제할 수 있어요!",
+          "상품 태그는 터치해서 삭제할 수 있어요!",
           style: AppTextStyles.grey600ColorB2,
         ),
       ],
