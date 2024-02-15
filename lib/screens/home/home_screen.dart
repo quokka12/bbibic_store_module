@@ -79,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       backgroundColor: AppColors.grey200,
       body: SafeArea(
@@ -89,11 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
               firebaseBannerHelper(),
               homeMenuHelper(),
               const SizedBox(height: 16),
-              firebaseGoodsListHelper(
-                  AppAssets.imageNew, "삐빅샵 새로 나온 상품", goodsProvider),
+              firebaseGoodsListHelper(AppAssets.imageNew, "삐빅샵 새로 나온 상품",
+                  goodsProvider, cartProvider),
               const SizedBox(height: 16),
               firebaseGoodsListHelper(
-                  AppAssets.imageHot, "삐빅샵 인기상품", goodsProvider),
+                  AppAssets.imageHot, "삐빅샵 인기상품", goodsProvider, cartProvider),
               const SizedBox(height: 16),
             ],
           ),
@@ -239,8 +240,8 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Widget firebaseGoodsListHelper(
-      String image, String title, GoodsProvider goodsProvider) {
+  Widget firebaseGoodsListHelper(String image, String title,
+      GoodsProvider goodsProvider, CartProvider cartProvider) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20),
       color: Colors.white,
@@ -296,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GestureDetector(
                             onTap: () {
                               goodsProvider.set(goodsList[i]);
+                              cartProvider.getData(context);
                               context.pushNamed(RouteNames.goodsDetail);
                             },
                             child: SizedBox(

@@ -26,7 +26,6 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen>
   Widget build(BuildContext context) {
     final goodsProvider = Provider.of<GoodsProvider>(context);
     final cartProvider = Provider.of<CartProvider>(context);
-    cartProvider.getData(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -106,7 +105,7 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen>
           padding: EdgeInsets.only(right: 20),
           alignment: Alignment.centerRight,
           child: Text(
-            "${FormatUtil.priceFormat(goodsProvider.goods.goodsPrice!)}원",
+            "${FormatUtil.priceFormat(goodsProvider.goods.goodsPrice ?? 0)}원",
             style: AppTextStyles.blackColorS1,
           ),
         ),

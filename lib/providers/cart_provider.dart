@@ -5,7 +5,6 @@ import 'package:bbibic_store/theme/app_text_styles.dart';
 import 'package:bbibic_store/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../configs/router/route_names.dart';
 import '../models/cart.dart';
@@ -75,9 +74,7 @@ class CartProvider with ChangeNotifier {
         action: SnackBarAction(
           label: '장바구니로 이동',
           onPressed: () {
-            final cartProvider =
-                Provider.of<CartProvider>(context, listen: false);
-            cartProvider.getData(context);
+            getData(context);
             context.pushNamed(RouteNames.cart);
           },
         ),
