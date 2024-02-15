@@ -12,6 +12,8 @@ import '../../models/goods.dart';
 import '../../providers/network_provider.dart';
 
 class BannerFirebase {
+  BannerFirebase._();
+
   static final CollectionReference<Map<String, dynamic>> _collectionReference =
   FirebaseFirestore.instance.collection("banners");
 

@@ -1,8 +1,6 @@
 import 'package:bbibic_store/screens/widgets/my_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import '../../../database/firebase/category_firebase.dart';
@@ -16,7 +14,8 @@ class CategoryManagementScreen extends StatefulWidget {
   const CategoryManagementScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
+  State<CategoryManagementScreen> createState() =>
+      _CategoryManagementScreenState();
 }
 
 class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
@@ -32,14 +31,14 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    return  GestureDetector(
+    return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MyAppBar.basicAppBar(context,"상품 태그 관리", null),
+              MyAppBar.basicAppBar(context, "상품 태그 관리", null),
               _addCategoryHelper(categoryProvider),
               _categoryHelper(categoryProvider),
             ],
@@ -49,18 +48,18 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     );
   }
 
-  Widget _addCategoryHelper(CategoryProvider categoryProvider){
+  Widget _addCategoryHelper(CategoryProvider categoryProvider) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("상품 태그 추가",style: AppTextStyles.blackColorH2Bold),
+          Text("상품 태그 추가", style: AppTextStyles.blackColorH2Bold),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
-                child:Container(
+                child: Container(
                   padding: const EdgeInsets.only(top: 18),
                   height: 40,
                   decoration: BoxDecoration(
@@ -68,13 +67,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
-                      controller: categoryNameController,
-                      decoration: const InputDecoration(
-                        hintText: '추가할 태그명을 작성해주세요.',
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                      ),
+                    controller: categoryNameController,
+                    decoration: const InputDecoration(
+                      hintText: '추가할 태그명을 작성해주세요.',
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                    ),
                     maxLines: 1,
                     minLines: 1,
                   ),
@@ -84,13 +83,14 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 padding: const EdgeInsets.only(left: 12.0),
                 child: Container(
                   height: 40,
-                  decoration: AppDecorations.buttonDecoration(AppColors.black),
+                  decoration: AppDecorations.buttonDecoration(AppColors.bbibic),
                   child: MaterialButton(
-                    onPressed: (){
-                      categoryProvider.add(context, categoryNameController.text);
+                    onPressed: () {
+                      categoryProvider.add(
+                          context, categoryNameController.text);
                       categoryNameController.clear();
                     },
-                    child: Text("추가하기",style: AppTextStyles.whiteColorB1),
+                    child: Text("추가하기", style: AppTextStyles.whiteColorB1),
                   ),
                 ),
               ),
@@ -101,13 +101,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     );
   }
 
-  Widget _categoryHelper(CategoryProvider categoryProvider){
+  Widget _categoryHelper(CategoryProvider categoryProvider) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("상품 태그",style: AppTextStyles.blackColorH2Bold),
+          Text("상품 태그", style: AppTextStyles.blackColorH2Bold),
           _categoryRemoveInfoHelper(),
           const SizedBox(height: 8),
           _categoryList(categoryProvider),
@@ -139,7 +139,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             spacing: 12,
             runSpacing: 12,
             children: [
-              for(int i =0; i<categoryList!.length;i++)
+              for (int i = 0; i < categoryList!.length; i++)
                 _categoryCard(categoryList[i], categoryProvider),
             ],
           );
@@ -153,7 +153,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       padding: const EdgeInsets.all(6),
       child: InkWell(
         onTap: () {
-          MyDialog.categoryDeleteDialog(context,categoryProvider,name);
+          MyDialog.categoryDeleteDialog(context, categoryProvider, name);
           CategoryFirebase.getData(context).then((value) {
             categoryProvider.refresh(value);
           });

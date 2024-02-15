@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -8,6 +7,7 @@ import '../../../../models/goods.dart';
 import '../../../../providers/goods_provider.dart';
 import '../../../../theme/app_decorations.dart';
 import '../../../../theme/app_text_styles.dart';
+import '../../../../util/format_util.dart';
 import '../../../widgets/my_dialog.dart';
 
 class GoodsListWidget extends StatelessWidget {
@@ -21,39 +21,37 @@ class GoodsListWidget extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(12),
             child: FutureBuilder<List<Goods>>(
-              future: GoodsFirebase.getData(context),
-              builder: (BuildContext context, AsyncSnapshot<List<Goods>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  // 데이터 로딩 중일 때의 UI 처리
-                  return _loadingHelper();
-                }
+                future: GoodsFirebase.getData(context),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Goods>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return _loadingHelper();
+                  }
 
-                if (snapshot.hasError) {
-                  // 에러 발생 시의 UI 처리
-                  return Text('에러 발생: ${snapshot.error}');
-                }
+                  if (snapshot.hasError) {
+                    // 에러 발생 시의 UI 처리
+                    return Text('에러 발생: ${snapshot.error}');
+                  }
 
-                List<Goods>? goodsList = snapshot.data;
+                  List<Goods>? goodsList = snapshot.data;
+                  if (snapshot.data == null ||
+                      goodsList == null ||
+                      goodsList.isEmpty) {
+                    return _noDataHelper();
+                  }
 
-                // 데이터를 성공적으로 받아온 경우의 UI 처리
-                if(snapshot.data == null || goodsList == null || goodsList.isEmpty){
-                  return _noDataHelper();
-                }
-
-                // TODO: 받아온 데이터를 활용한 UI 구성 및 반환 처리
-                return _dataListHelper(context, goodsProvider, goodsList);
-              }
-            )
-        ),
+                  // TODO: 받아온 데이터를 활용한 UI 구성 및 반환 처리
+                  return _dataListHelper(context, goodsProvider, goodsList);
+                })),
       ),
     );
   }
 
-  Widget _noDataHelper(){
-    return Center(child: Text('데이터가 없습니다.',style: AppTextStyles.blackColorH1));
+  Widget _noDataHelper() {
+    return Center(child: Text('데이터가 없습니다.', style: AppTextStyles.blackColorH1));
   }
 
-  Widget _loadingHelper(){
+  Widget _loadingHelper() {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
@@ -146,7 +144,7 @@ class GoodsListWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        const SizedBox(height:58),
+                        const SizedBox(height: 58),
                       ],
                     ),
                   ],
@@ -159,7 +157,8 @@ class GoodsListWidget extends StatelessWidget {
     );
   }
 
-  Widget _dataListHelper(BuildContext context, GoodsProvider goodsProvider, List<Goods>? goodsList){
+  Widget _dataListHelper(BuildContext context, GoodsProvider goodsProvider,
+      List<Goods> goodsList) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 100),
       child: SizedBox(
@@ -167,102 +166,7 @@ class GoodsListWidget extends StatelessWidget {
         child: Column(
           children: [
             for (int i = 0; i < goodsList!.length; i++) ...[
-              Container(
-                width:double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: AppDecorations.buttonDecoration(Colors.white),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width:double.infinity,
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: [
-                          Image.network(goodsList[i].thumbnailImages![0],
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.contain,
-                            loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
-                              if(loadingProgress == null){
-                                return child;
-                              }
-                              return Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor: Colors.grey.shade100,
-                                child:
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${goodsList[i].goodsName}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.blackColorB1Bold,
-                                ),
-                                Text(
-                                  goodsList[i].status ? "판매중" : "판매정지",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: goodsList[i].status ?
-                                  AppTextStyles.blueColorB1:
-                                  AppTextStyles.redColorB1,
-                                ),
-                                Text(
-                                  "판매 수량 : ${goodsList[i].goodsSell}",
-                                  style: AppTextStyles.blackColorB1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  "조회 수 : ${goodsList[i].views}",
-                                  style: AppTextStyles.blackColorB1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  "${goodsList[i].createdDate}",
-                                  style: AppTextStyles.grey600ColorB2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  "판매 여부",
-                                  style: AppTextStyles.blackColorB1Bold,
-                                ),
-                                Switch(
-                                  activeColor: Colors.blueAccent,
-                                  value: goodsList[i].status,
-                                  onChanged: (value) => goodsProvider.changeStatus(context, goodsList[i].goodsId!, !goodsList[i].status),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width:double.infinity,
-                      decoration: AppDecorations.buttonDecoration(Colors.redAccent),
-                      child: MaterialButton(onPressed: () =>
-                          MyDialog.goodsDeleteDialog(
-                            context,
-                            goodsProvider,
-                            goodsList[i],
-                          ),
-                        child: Text("상품 삭제",style: AppTextStyles.whiteColorB2),),
-                    ),
-                  ],
-                ),
-              ),
+              _itemCard(context, goodsProvider, goodsList, i),
               const SizedBox(height: 12),
             ]
           ],
@@ -271,4 +175,95 @@ class GoodsListWidget extends StatelessWidget {
     );
   }
 
+  Widget _itemCard(BuildContext context, GoodsProvider goodsProvider,
+      List<Goods> goodsList, int i) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: AppDecorations.buttonDecoration(Colors.white),
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                Image.network(
+                  goodsList[i].thumbnailImages![0],
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
+                SizedBox(
+                  width: 150,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${goodsList[i].goodsName}",
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.blackColorB1Bold,
+                      ),
+                      Text(
+                        "${FormatUtil.priceFormat(goodsList[i].goodsPrice!)}원",
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.blackColorB1,
+                      ),
+                      Text(
+                        goodsList[i].status ? "판매중" : "판매정지",
+                        overflow: TextOverflow.ellipsis,
+                        style: goodsList[i].status
+                            ? AppTextStyles.blueColorB1
+                            : AppTextStyles.redColorB1,
+                      ),
+                      Text(
+                        "판매 수량 : ${goodsList[i].goodsSell}",
+                        style: AppTextStyles.blackColorB1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "조회 수 : ${goodsList[i].views}",
+                        style: AppTextStyles.blackColorB1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "${goodsList[i].createdDate}",
+                        style: AppTextStyles.grey600ColorB2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "판매 여부",
+                        style: AppTextStyles.blackColorB1Bold,
+                      ),
+                      Switch(
+                        activeColor: Colors.blueAccent,
+                        value: goodsList[i].status,
+                        onChanged: (value) => goodsProvider.changeStatus(
+                            context,
+                            goodsList[i].goodsId!,
+                            !goodsList[i].status),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            decoration: AppDecorations.buttonDecoration(Colors.redAccent),
+            child: MaterialButton(
+              onPressed: () => MyDialog.goodsDeleteDialog(
+                context,
+                goodsProvider,
+                goodsList[i],
+              ),
+              child: Text("상품 삭제", style: AppTextStyles.whiteColorB2),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

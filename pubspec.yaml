@@ -63,6 +63,7 @@ dependencies:
   kpostal: ^0.5.1
   webview_flutter: ^4.5.0
   webview_flutter_android: ^3.14.0
+  dropdown_button2: ^2.3.9
 
 flutter_icons:
   android: true

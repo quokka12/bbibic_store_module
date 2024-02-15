@@ -1,9 +1,10 @@
+import 'package:bbibic_store/providers/address_provider.dart';
 import 'package:bbibic_store/providers/banner_provider.dart';
+import 'package:bbibic_store/providers/cart_provider.dart';
 import 'package:bbibic_store/providers/category_provider.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/providers/network_provider.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
-import 'package:bbibic_store/theme/app_colors.dart';
 import 'package:bbibic_store/theme/app_themes.dart';
 import 'package:bbibic_store/view_model/goods_detail_tab_bar_view_model.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -52,8 +53,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => NetworkProvider()),
         ChangeNotifierProvider(create: (context) => GoodsProvider()),
-        ChangeNotifierProvider(create: (context) => GoodsDetailTabBarViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => GoodsDetailTabBarViewModel()),
         ChangeNotifierProvider(create: (context) => BannerProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => AddressProvider()),
       ],
       child: MaterialApp.router(
         theme: AppThemes.mainTheme(),

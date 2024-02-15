@@ -1,7 +1,9 @@
 import 'package:bbibic_store/configs/router/route_names.dart';
 import 'package:bbibic_store/configs/router/screen_transition.dart';
+import 'package:bbibic_store/screens/add_address/add_adress_screen.dart';
+import 'package:bbibic_store/screens/address_management/address_management_screen.dart';
 import 'package:bbibic_store/screens/admin/add_banner/add_banner_screen.dart';
-import 'package:bbibic_store/screens/delivery_address_management/delivery_address_management_screen.dart';
+import 'package:bbibic_store/screens/cart/cart_screen.dart';
 import 'package:bbibic_store/screens/goods_detail/goods_detail_screen.dart';
 import 'package:bbibic_store/screens/service_web_view/service_center_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +24,8 @@ class AppRouter {
       GoRoute(
         name: RouteNames.home,
         path: '/',
-        pageBuilder: (context, state) => ScreenTrainsition.fadeTransition(state, const HomeScreen()),
+        pageBuilder: (context, state) =>
+            ScreenTrainsition.fadeTransition(state, const HomeScreen()),
         routes: [
           GoRoute(
             name: RouteNames.goodsDetail,
@@ -30,21 +33,26 @@ class AppRouter {
             builder: (context, state) => const GoodsDetailScreen(),
           ),
           GoRoute(
+            name: RouteNames.cart,
+            path: RouteNames.cart,
+            builder: (context, state) => const CartScreen(),
+          ),
+          GoRoute(
             name: RouteNames.myInfo,
             path: RouteNames.myInfo,
             builder: (context, state) => const MyInfoScreen(),
             routes: [
               GoRoute(
-                  name: RouteNames.goodsManagement,
-                  path: RouteNames.goodsManagement,
-                  builder: (context, state) => const GoodsManagementScreen(),
-                  routes: [
-                    GoRoute(
-                      name: RouteNames.addGoods,
-                      path: RouteNames.addGoods,
-                      builder: (context, state) => const AddGoodsScreen(),
-                    ),
-                  ]
+                name: RouteNames.goodsManagement,
+                path: RouteNames.goodsManagement,
+                builder: (context, state) => const GoodsManagementScreen(),
+                routes: [
+                  GoRoute(
+                    name: RouteNames.addGoods,
+                    path: RouteNames.addGoods,
+                    builder: (context, state) => const AddGoodsScreen(),
+                  ),
+                ],
               ),
               GoRoute(
                 name: RouteNames.categoryManagement,
@@ -55,13 +63,13 @@ class AppRouter {
                 name: RouteNames.bannerManagement,
                 path: RouteNames.bannerManagement,
                 builder: (context, state) => const BannerManagementScreen(),
-                  routes: [
-                    GoRoute(
-                      name: RouteNames.addBanner,
-                      path: RouteNames.addBanner,
-                      builder: (context, state) => const AddBannerScreen(),
-                    ),
-                  ]
+                routes: [
+                  GoRoute(
+                    name: RouteNames.addBanner,
+                    path: RouteNames.addBanner,
+                    builder: (context, state) => const AddBannerScreen(),
+                  ),
+                ],
               ),
               GoRoute(
                 name: RouteNames.serviceCenter,
@@ -81,14 +89,19 @@ class AppRouter {
               GoRoute(
                 name: RouteNames.deliveryAddressManagement,
                 path: RouteNames.deliveryAddressManagement,
-                builder: (context, state) => const DeliveryAddressManagementScreen(),
+                builder: (context, state) => const AddressManagementScreen(),
+                routes: [
+                  GoRoute(
+                    name: RouteNames.addAddress,
+                    path: RouteNames.addAddress,
+                    builder: (context, state) => const AddAddressScreen(),
+                  ),
+                ],
               ),
-            ]
+            ],
           ),
-
-        ]
+        ],
       ),
-
     ],
   );
 }

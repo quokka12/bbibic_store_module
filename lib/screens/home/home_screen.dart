@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:bbibic_store/database/firebase/banner_firebase.dart';
 import 'package:bbibic_store/database/firebase/goods_firebase.dart';
@@ -7,21 +5,17 @@ import 'package:bbibic_store/models/ad_banner.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../configs/router/route_names.dart';
-import '../../database/firebase/category_firebase.dart';
 import '../../models/goods.dart';
-import '../../providers/category_provider.dart';
+import '../../providers/cart_provider.dart';
 import '../../theme/app_assets.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_sizes.dart';
 import '../../theme/app_text_styles.dart';
-import '../widgets/loading_bar.dart';
-
+import '../../util/format_util.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {"image": AppAssets.imageMedicine, "title": "영양제"},
     {"image": AppAssets.imageCream, "title": "영양크림"},
     {"image": AppAssets.imageMask, "title": "위생용품"},
+    {"image": AppAssets.imageMedicalEquipment, "title": "의료기기"},
     {"image": AppAssets.imageInterior, "title": "인테리어"},
   ];
 
@@ -85,20 +80,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.grey200,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               homeAppBar(),
               firebaseBannerHelper(),
-              const SizedBox(height: 20),
               homeMenuHelper(),
-              const SizedBox(height: 20),
-              firebaseGoodsListHelper("삐빅샵 새로 나온 상품", goodsProvider),
-              const SizedBox(height: 20),
-              goodsListHelper("삐빅샵 인기상품", popularGoodsList),
-              const SizedBox(height: 60),
+              const SizedBox(height: 16),
+              firebaseGoodsListHelper(
+                  AppAssets.imageNew, "삐빅샵 새로 나온 상품", goodsProvider),
+              const SizedBox(height: 16),
+              firebaseGoodsListHelper(
+                  AppAssets.imageHot, "삐빅샵 인기상품", goodsProvider),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -110,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
       height: 56,
+      color: Colors.white,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -117,42 +114,47 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                alignment: Alignment.center,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.grey200,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("원하시는 상품이 있으신가요?",
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.grey600ColorC1,
-                    ),
-                    const Icon(
-                      Icons.search_rounded,
-                      size: 24,
-                      color: AppColors.grey800,
-                    ),
-                  ],
-                )
-                ),
-              ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  alignment: Alignment.center,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.grey200,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "원하시는 상품이 있으신가요?",
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.grey600ColorC1,
+                      ),
+                      const Icon(
+                        Icons.search_rounded,
+                        size: 24,
+                        color: AppColors.grey800,
+                      ),
+                    ],
+                  )),
             ),
+          ),
           const SizedBox(width: 12),
           Row(
             children: [
               GestureDetector(
-                onTap: () { },
-                child: const Icon(Icons.shopping_cart, size: 24),
+                onTap: () {
+                  final cartProvider =
+                      Provider.of<CartProvider>(context, listen: false);
+                  cartProvider.getData(context);
+                  context.pushNamed(RouteNames.cart);
+                },
+                child: const Icon(Icons.shopping_cart_outlined, size: 24),
               ),
               const SizedBox(width: 12),
               GestureDetector(
-                onTap: ()=> context.goNamed(RouteNames.myInfo),
-                child: const Icon(Icons.person, size: 24),
+                onTap: () => context.goNamed(RouteNames.myInfo),
+                child: const Icon(Icons.person_outlined, size: 24),
               ),
             ],
           )
@@ -162,136 +164,46 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget homeMenuHelper() {
-    return Row(
-      children: [
-        for (int i = 0; i < menuList.length; i++)
-          Expanded(
-            child: Column(
-              children: [
-                Image.asset(
-                  menuList[i]["image"],
-                  width: 42,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  menuList[i]["title"],
-                  style: AppTextStyles.blackColorB2,
-                ),
-              ],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          for (int i = 0; i < menuList.length; i++) ...[
+            Expanded(
+              child: Column(
+                children: [
+                  Image.asset(
+                    menuList[i]["image"],
+                    width: 36,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    menuList[i]["title"],
+                    style: AppTextStyles.blackColorC1,
+                  ),
+                ],
+              ),
             ),
-          )
-      ],
-    );
-  }
-
-  Widget goodsListHelper(String title, List<Map> goodsList) {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        Container(
-          padding: const EdgeInsets.only(left: 20),
-          alignment: Alignment.bottomLeft,
-          child: Text(title, style: AppTextStyles.blackColorH2Bold),
-        ),
-        const SizedBox(height: 12),
-        FutureBuilder(
-            future: Future.delayed(const Duration(seconds: 1)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 1000),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 20),
-                        for (int i = 0; i < goodsList.length; i++) ...[
-                          Container(
-                            width: 160,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  goodsList[i]["image"],
-                                  width: 160,
-                                  height: 120,
-                                  fit: BoxFit.contain,
-                                ),
-                                Text(
-                                  goodsList[i]["title"],
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.blackColorS1,
-                                ),
-                                Text(
-                                  "${goodsList[i]["price"]} 원",
-                                  style: AppTextStyles.blackColorS2Bold,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                        ]
-                      ],
-                    ),
-                  ),
-                );
-              }
-              return Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      for (int i = 0; i < 10; i++) ...[
-                        Container(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 160,
-                                height: 160,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                width: 160,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                width: 80,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                      ]
-                    ],
-                  ),
-                ),
-              );
-            }),
-      ],
+            if (i != menuList.length - 1)
+              Container(
+                width: 1,
+                height: 28,
+                color: AppColors.grey300,
+              )
+          ]
+        ],
+      ),
     );
   }
 
   Widget firebaseBannerHelper() {
     return FutureBuilder(
         future: BannerFirebase.getData(context),
-        builder: (BuildContext context, AsyncSnapshot<List<AdBanner>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<AdBanner>> snapshot) {
           List<AdBanner>? bannerList = snapshot.data;
           if (snapshot.connectionState == ConnectionState.done) {
             return AnimatedSwitcher(
@@ -303,27 +215,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     dotSize: 0,
                     dotBgColor: Colors.transparent,
                     images: [
-                      for(int i=0; i < bannerList!.length ;i++)...[
+                      for (int i = 0; i < bannerList!.length; i++) ...[
                         Image.network(
                           bannerList[i].image,
                           width: double.infinity,
                           height: AppSizes.ratioOfHorizontal(context, 1) / 3,
                           fit: BoxFit.fill,
-                          loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
-                            if(loadingProgress == null){
-                              return child;
-                            }
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child:
-                              Container(
-                                width: double.infinity,
-                                height: AppSizes.ratioOfHorizontal(context, 1) / 3,
-                                decoration: const BoxDecoration(color: Colors.black),
-                              ),
-                            );
-                          },
                         ),
                       ]
                     ],
@@ -342,194 +239,151 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Widget firebaseGoodsListHelper(String title,GoodsProvider goodsProvider) {
-    return  Column(
+  Widget firebaseGoodsListHelper(
+      String image, String title, GoodsProvider goodsProvider) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      color: Colors.white,
+      child: Column(
         children: [
-        const SizedBox(height: 20),
-        Container(
-          padding: const EdgeInsets.only(left: 20),
-          alignment: Alignment.bottomLeft,
-          child: Text(title, style: AppTextStyles.blackColorH2Bold),
-        ),
-        const SizedBox(height: 12),
-        FutureBuilder<List<Goods>>(
-          future: GoodsFirebase.getDataSortByCreatedDate(context),
-          builder: (BuildContext context, AsyncSnapshot<List<Goods>> snapshot) {
-            List<Goods>? goodsList = snapshot.data;
-            if(goodsList == null){
-              return Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      for (int i = 0; i < 10; i++) ...[
-                        Container(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                width: 160,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                width: 80,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                      ],
-                    ],
-                  ),
+          Container(
+            padding: const EdgeInsets.only(left: 20),
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                Image.asset(
+                  image,
+                  width: 32,
+                  fit: BoxFit.contain,
                 ),
-              );
-            }
-            if(goodsList.isEmpty){
-              return Column(
-                children: [
-                  Text(
-                    "곧 새로운 상품이 등록될 예정이에요!",
-                    style: AppTextStyles.grey600ColorB2,
-                  ),
-                  Text(
-                    "조금만 기다려주세요~",
-                    style: AppTextStyles.grey600ColorB2,
-                  ),
-                ],
-              );
-            }
-            if(snapshot.connectionState == ConnectionState.done) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 1000),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      for (int i = 0; i < goodsList!.length; i++) ...[
-                        GestureDetector(
-                      onTap : (){
-                        goodsProvider.set(goodsList[i]);
-                        context.pushNamed(RouteNames.goodsDetail);
-                      },
-                      child: SizedBox(
-                        width: 160,
-                        child: Column(
-                          children: [
-                            Image.network(goodsList[i].thumbnailImages![0],
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.contain,
-                              loadingBuilder: (context, Widget child, ImageChunkEvent? loadingProgress) {
-                                if(loadingProgress == null){
-                                  return child;
-                                }
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child:
-                                  Container(
-                                    width: 150,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+                SizedBox(width: 8),
+                Text(title, style: AppTextStyles.blackColorS1Bold),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          FutureBuilder<List<Goods>>(
+            future: GoodsFirebase.getDataSortByCreatedDate(context),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Goods>> snapshot) {
+              List<Goods>? goodsList = snapshot.data;
+              if (goodsList == null) {
+                return goodsLoadingHelper();
+              }
+              if (goodsList.isEmpty) {
+                return Column(
+                  children: [
+                    Text(
+                      "곧 새로운 상품이 등록될 예정이에요!",
+                      style: AppTextStyles.grey600ColorB2,
+                    ),
+                    Text(
+                      "조금만 기다려주세요~",
+                      style: AppTextStyles.grey600ColorB2,
+                    ),
+                  ],
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 1000),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        for (int i = 0; i < goodsList!.length; i++) ...[
+                          GestureDetector(
+                            onTap: () {
+                              goodsProvider.set(goodsList[i]);
+                              context.pushNamed(RouteNames.goodsDetail);
+                            },
+                            child: SizedBox(
+                              width: 160,
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    goodsList[i].thumbnailImages![0],
+                                    width: 120,
+                                    height: 120,
+                                    fit: BoxFit.contain,
                                   ),
-                                );
-                              },
+                                  Text(
+                                    "${goodsList[i].goodsName}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.blackColorB1,
+                                  ),
+                                  Text(
+                                    "${FormatUtil.priceFormat(goodsList[i].goodsPrice!)}원",
+                                    style: AppTextStyles.blackColorB2Bold,
+                                  ),
+                                ],
+                              ),
                             ),
-                            Text(
-                              "${goodsList[i].goodsName}",
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.blackColorS1,
-                            ),
-                            Text(
-                              "${goodsList[i].goodsPrice} 원",
-                              style: AppTextStyles.blackColorS2Bold,
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 16),
+                        ]
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return goodsLoadingHelper();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget goodsLoadingHelper() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            const SizedBox(width: 20),
+            for (int i = 0; i < 5; i++) ...[
+              SizedBox(
+                width: 160,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                        const SizedBox(width: 16),
-                      ]
-                    ],
-                  ),
-                ),
-              );
-            }
-            return Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 20),
-                    for (int i = 0; i < 10; i++) ...[
-                      Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                              width: 160,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                              width: 80,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ],
-                        ),
+                    const SizedBox(height: 4),
+                    Container(
+                      width: 160,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(width: 16),
-                    ],
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      width: 100,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            );
-          },
+              const SizedBox(width: 28),
+            ],
+          ],
         ),
-      ],
+      ),
     );
   }
 }

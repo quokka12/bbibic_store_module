@@ -1,5 +1,3 @@
-
-import 'package:bbibic_store/configs/router/route_names.dart';
 import 'package:bbibic_store/models/goods.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
 import 'package:bbibic_store/screens/admin/add_goods/widgets/category_widget.dart';
@@ -7,10 +5,9 @@ import 'package:bbibic_store/screens/admin/add_goods/widgets/detail_image_widget
 import 'package:bbibic_store/screens/admin/add_goods/widgets/thumbnail_widget.dart';
 import 'package:bbibic_store/screens/admin/components/photo_component.dart';
 import 'package:bbibic_store/theme/app_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../providers/category_provider.dart';
 import '../../../providers/goods_provider.dart';
 import '../../../theme/app_decorations.dart';
@@ -48,15 +45,11 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              MyAppBar.basicAppBar(
-                context,
-                "상품 추가",
-                (){
-                  categoryProvider.clear();
-                  photoProvider.clear();
-                  Navigator.pop(context);
-                }
-              ),
+              MyAppBar.basicAppBar(context, "상품 추가", () {
+                categoryProvider.clear();
+                photoProvider.clear();
+                Navigator.pop(context);
+              }),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -86,11 +79,12 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("상품 이름",style: AppTextStyles.blackColorH2Bold),
+          Text("상품 이름", style: AppTextStyles.blackColorH2Bold),
           SizedBox(height: 12),
           TextField(
-            decoration:
-            InputDecoration(hintText: "상품 이름을 입력해주세요.", hintStyle: AppTextStyles.grey600ColorB1),
+            decoration: InputDecoration(
+                hintText: "상품 이름을 입력해주세요.",
+                hintStyle: AppTextStyles.grey600ColorB1),
             style: AppTextStyles.blackColorB1,
             showCursor: true,
             controller: controllerName,
@@ -108,12 +102,13 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("상품 가격",style: AppTextStyles.blackColorH2Bold),
+          Text("상품 가격", style: AppTextStyles.blackColorH2Bold),
           SizedBox(height: 12),
           TextField(
             keyboardType: TextInputType.number,
-            decoration:
-              InputDecoration(hintText: "가격을 입력해주세요.", hintStyle: AppTextStyles.grey600ColorB1),
+            decoration: InputDecoration(
+                hintText: "가격을 입력해주세요.",
+                hintStyle: AppTextStyles.grey600ColorB1),
             style: AppTextStyles.blackColorB1,
             showCursor: true,
             controller: controllerPrice,
@@ -125,15 +120,16 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
     );
   }
 
-  Widget _addButton(GoodsProvider goodsProvider, PhotoProvider photoProvider, CategoryProvider categoryProvider){
+  Widget _addButton(GoodsProvider goodsProvider, PhotoProvider photoProvider,
+      CategoryProvider categoryProvider) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
         height: 48,
         width: double.infinity,
-        decoration: AppDecorations.buttonDecoration(AppColors.black),
+        decoration: AppDecorations.buttonDecoration(AppColors.bbibic),
         child: MaterialButton(
-          onPressed: () async{
+          onPressed: () async {
             await goodsProvider.add(
               context,
               Goods(
@@ -147,10 +143,11 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
                 thumbnailImages: [],
                 detailImages: [],
               ),
-              photoProvider.thumbnailList, photoProvider.detailList,
+              photoProvider.thumbnailList,
+              photoProvider.detailList,
             );
           },
-          child: Text("상품 추가하기",style: AppTextStyles.whiteColorB1),
+          child: Text("상품 추가하기", style: AppTextStyles.whiteColorB1),
         ),
       ),
     );
