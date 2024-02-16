@@ -60,25 +60,43 @@ class _HomeScreenState extends State<HomeScreen> {
           List<AdBanner>? bannerList = snapshot.data;
           if (snapshot.connectionState == ConnectionState.done) {
             return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: AppSizes.ratioOfHorizontal(context, 1) / 3,
-                  child: AnotherCarousel(
-                    dotSize: 0,
-                    dotBgColor: Colors.transparent,
-                    images: [
-                      for (int i = 0; i < bannerList!.length; i++) ...[
-                        Image.network(
-                          bannerList[i].image,
-                          width: double.infinity,
-                          height: AppSizes.ratioOfHorizontal(context, 1) / 3,
-                          fit: BoxFit.fill,
-                        ),
-                      ]
-                    ],
-                  ),
-                ));
+              duration: const Duration(milliseconds: 100),
+              child: SizedBox(
+                width: double.infinity,
+                height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+                child: AnotherCarousel(
+                  dotSize: 0,
+                  dotBgColor: Colors.transparent,
+                  images: [
+                    for (int i = 0; i < bannerList!.length; i++) ...[
+                      Image.network(
+                        bannerList[i].image,
+                        width: double.infinity,
+                        height: AppSizes.ratioOfHorizontal(context, 1) / 3,
+                        fit: BoxFit.fill,
+                        loadingBuilder: (context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              width: AppSizes.ratioOfHorizontal(context, 1),
+                              height: AppSizes.ratioOfHorizontal(context, 1),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ]
+                  ],
+                ),
+              ),
+            );
           }
           return Shimmer.fromColors(
             baseColor: Colors.grey.shade300,

@@ -24,24 +24,26 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(children: [
-          MyAppBar.oneMenuAppBar(context, "상품 상세정보", () {
-            goodsProvider.clear();
-            Navigator.pop(context);
-          }, Icon(Icons.favorite_border, size: 28), () {}),
-          const Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GoodsDetailInfoWidget(),
-                  SizedBox(height: 12),
-                  GoodsDetailTabBar(),
-                ],
+        child: Column(
+          children: [
+            MyAppBar.oneMenuAppBar(context, "상품 상세정보", () {
+              goodsProvider.clear();
+              Navigator.pop(context);
+            }, Icon(Icons.favorite_border, size: 28), () {}),
+            const Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GoodsDetailInfoWidget(),
+                    SizedBox(height: 12),
+                    GoodsDetailTabBar(),
+                  ],
+                ),
               ),
             ),
-          ),
-          const GoodsDetailButtonWidget(),
-        ]),
+            const GoodsDetailButtonWidget(),
+          ],
+        ),
       ),
     );
   }

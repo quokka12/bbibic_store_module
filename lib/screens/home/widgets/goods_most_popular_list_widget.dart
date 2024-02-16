@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../configs/router/route_names.dart';
 import '../../../database/firebase/goods_firebase.dart';
@@ -108,6 +109,23 @@ class GoodsMostPopularListWidget extends StatelessWidget {
                               width: 120,
                               height: 120,
                               fit: BoxFit.contain,
+                              loadingBuilder: (context, Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width: 120,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             Text(
                               "${goodsList[i].goodsName}",
