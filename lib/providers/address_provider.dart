@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import '../models/address.dart';
+import '../screens/widgets/loading_bar.dart';
 
 class AddressProvider with ChangeNotifier {
   List<Address> addressList = [];
@@ -24,7 +25,9 @@ class AddressProvider with ChangeNotifier {
     if (address.securityCode.isEmpty) {
       address.securityCode = '없음';
     }
+    AppLoadingBar.addDataLoading(context);
     bool isSuccess = await AddressFirebase.add(context, address);
+    Navigator.pop(context);
     if (isSuccess) {
       ToastUtil.basic("저장 완료");
       context.pop();

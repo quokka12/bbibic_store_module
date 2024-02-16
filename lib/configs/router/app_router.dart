@@ -5,6 +5,7 @@ import 'package:bbibic_store/screens/address_management/address_management_scree
 import 'package:bbibic_store/screens/admin/add_banner/add_banner_screen.dart';
 import 'package:bbibic_store/screens/cart/cart_screen.dart';
 import 'package:bbibic_store/screens/goods_detail/goods_detail_screen.dart';
+import 'package:bbibic_store/screens/goods_search/goods_search_screen.dart';
 import 'package:bbibic_store/screens/service_web_view/service_center_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,7 @@ import '../../screens/admin/add_goods/add_goods_screen.dart';
 import '../../screens/admin/banner_management/banner_management_screen.dart';
 import '../../screens/admin/category_management/category_management_screen.dart';
 import '../../screens/admin/goods_management/goods_management_screen.dart';
+import '../../screens/goods_list/goods_list_screen.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/my_info/my_info_screen.dart';
 import '../../screens/service_web_view/privacy_policy_screen.dart';
@@ -31,6 +33,18 @@ class AppRouter {
             name: RouteNames.goodsDetail,
             path: RouteNames.goodsDetail,
             builder: (context, state) => const GoodsDetailScreen(),
+          ),
+          GoRoute(
+            name: RouteNames.goodsSearch,
+            path: RouteNames.goodsSearch,
+            builder: (context, state) => GoodsSearchScreen(),
+          ),
+          GoRoute(
+            name: RouteNames.goodsList,
+            path: "${RouteNames.goodsList}/:searchWord/:filter",
+            builder: (context, state) => GoodsListScreen(
+                searchWord: state.pathParameters['searchWord']!,
+                filter: state.pathParameters['filter']!),
           ),
           GoRoute(
             name: RouteNames.cart,

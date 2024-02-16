@@ -206,7 +206,7 @@ class GoodsListWidget extends StatelessWidget {
                         style: AppTextStyles.blackColorB1Bold,
                       ),
                       Text(
-                        "${FormatUtil.priceFormat(goodsList[i].goodsPrice!)}원",
+                        FormatUtil.priceFormat(goodsList[i].goodsPrice!),
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.blackColorB1,
                       ),

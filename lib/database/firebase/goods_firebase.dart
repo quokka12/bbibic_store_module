@@ -25,7 +25,6 @@ class GoodsFirebase {
         .checkNetwork();
     // 인터넷 상태 확인
     if (!isNetwork) return;
-    Logger().e(thumbnailImageList);
     DocumentReference docRef = _collectionReference.doc();
     //Storage에 사진 저장
     for (int i = 0; i < thumbnailImageList.length; i++) {
@@ -127,7 +126,7 @@ class GoodsFirebase {
 
       await _collectionReference
           .where('status', isEqualTo: true)
-          .orderBy("createdDate")
+          .orderBy("createdDate", descending: true)
           .get()
           .then(
         (querySnapshot) {
@@ -159,7 +158,7 @@ class GoodsFirebase {
 
       await _collectionReference
           .where('status', isEqualTo: true)
-          .orderBy("goodsSell")
+          .orderBy("goodsSell", descending: true)
           .get()
           .then(
         (querySnapshot) {
@@ -168,7 +167,6 @@ class GoodsFirebase {
               return Goods(status: true);
             }
             final data = docSnapshot.data();
-            Logger().i(data);
             goodsList.add(Goods.fromMap(data));
           }
         },

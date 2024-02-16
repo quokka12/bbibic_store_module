@@ -12,6 +12,8 @@ class RouteNames {
   static const deliveryAddressManagement = 'deliveryAddressManagement';
   static const addAddress = 'addAddress';
   static const cart = 'cart';
+  static const goodsList = 'goodsList';
+  static const goodsSearch = 'goodsSearch';
 
   /* admin */
   static const goodsManagement = 'goodsManagement';

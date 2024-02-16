@@ -85,6 +85,12 @@ class AppTextStyles {
       TextStyle(color: AppColors.grey600, fontSize: B2, height: 1.5);
   static final grey600ColorC1 =
       TextStyle(color: AppColors.grey600, fontSize: C1, height: 1.5);
+  static final grey600ColorC2 =
+      TextStyle(color: AppColors.grey600, fontSize: C2, height: 1.5);
+
+  /* grey800Color */
+  static final grey800ColorB1 =
+      TextStyle(color: AppColors.grey800, fontSize: C1, height: 1.5);
 
   /* redColor */
   static final redColorB1 =

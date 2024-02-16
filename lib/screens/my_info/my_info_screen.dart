@@ -1,3 +1,4 @@
+import 'package:bbibic_store/screens/widgets/company_info_widget.dart';
 import 'package:bbibic_store/theme/app_decorations.dart';
 import 'package:bbibic_store/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyInfoScreen extends StatelessWidget {
               appInfoHelper(context),
               adminInfoHelper(context),
               AppVersionHelper(context),
-              companyInfoHelper(),
+              const CompanyInfoWidget(),
             ],
           ),
         ),
@@ -42,8 +43,8 @@ class MyInfoScreen extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
-          margin: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.all(12),
           decoration: AppDecorations.buttonDecoration(Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,8 +72,8 @@ class MyInfoScreen extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
-          margin: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.all(12),
           decoration: AppDecorations.buttonDecoration(Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,23 +117,24 @@ class MyInfoScreen extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
-          margin: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.all(12),
           decoration: AppDecorations.buttonDecoration(Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () => context.pushNamed(RouteNames.termOfUser),
-                  child:
-                      Text("서비스 이용약관", style: AppTextStyles.blackColorB1Bold)),
+                onPressed: () => context.pushNamed(RouteNames.termOfUser),
+                child: Text("서비스 이용약관", style: AppTextStyles.blackColorB1Bold),
+              ),
               TextButton(
-                  onPressed: () => context.pushNamed(RouteNames.privacyPolicy),
-                  child:
-                      Text("개인정보처리방침", style: AppTextStyles.blackColorB1Bold)),
+                onPressed: () => context.pushNamed(RouteNames.privacyPolicy),
+                child: Text("개인정보처리방침", style: AppTextStyles.blackColorB1Bold),
+              ),
               TextButton(
-                  onPressed: () => context.pushNamed(RouteNames.serviceCenter),
-                  child: Text("고객센터", style: AppTextStyles.blackColorB1Bold)),
+                onPressed: () => context.pushNamed(RouteNames.serviceCenter),
+                child: Text("고객센터", style: AppTextStyles.blackColorB1Bold),
+              ),
             ],
           ),
         ),
@@ -150,8 +152,8 @@ class MyInfoScreen extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
-          margin: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.all(12),
           decoration: AppDecorations.buttonDecoration(Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,30 +189,6 @@ class MyInfoScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Text("App ver. 1.0.0.", style: AppTextStyles.grey600ColorC1),
-    );
-  }
-
-  Widget companyInfoHelper() {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Container(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20),
-            Text("(주)에스지엘 | 대표 김선명", style: AppTextStyles.grey600ColorC1),
-            Text("사업자등록번호 : 537-86-02993", style: AppTextStyles.grey600ColorC1),
-            Text("주소 : 서울시 서초구 남부순환로 2497",
-                style: AppTextStyles.grey600ColorC1),
-            Text("통신판매 : 제 2023-서울서초-3702호",
-                style: AppTextStyles.grey600ColorC1),
-            Text("FAX : 0504-423-0034 | EMAIL : bb@bbibic.com",
-                style: AppTextStyles.grey600ColorC1),
-            SizedBox(height: 32),
-          ],
-        ),
-      ),
     );
   }
 }

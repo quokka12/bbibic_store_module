@@ -17,19 +17,25 @@ class AppThemes {
   }
 
   static InputDecorationTheme inputDecorationTheme() {
-    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
-        borderRadius: BorderRadius.circular(12));
-    OutlineInputBorder outlineInputErrorBorder = OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.redAccent),
-        borderRadius: BorderRadius.circular(12));
-    OutlineInputBorder outlineInputFocusBorder = OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.black),
-        borderRadius: BorderRadius.circular(12));
     return InputDecorationTheme(
-        focusedBorder: outlineInputFocusBorder,
-        errorBorder: outlineInputErrorBorder,
-        border: outlineInputBorder,
+        filled: true,
+        fillColor: AppColors.grey200,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent, width: 0),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent, width: 0),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent, width: 0),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent, width: 0),
+          borderRadius: BorderRadius.circular(12),
+        ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 12, vertical: 12));
   }

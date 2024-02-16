@@ -28,14 +28,8 @@ class MyDialog {
             child: Column(
               children: [
                 Expanded(
-                  flex: 7,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 8),
-                      Text(content, style: AppTextStyles.blackColorB1)
-                    ],
-                  ),
-                ),
+                    flex: 7,
+                    child: Text(content, style: AppTextStyles.blackColorB1)),
                 Expanded(
                   flex: 4,
                   child: Container(
@@ -45,7 +39,7 @@ class MyDialog {
                           child: GestureDetector(
                             onTap: () => Navigator.pop(context),
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: AppColors.grey200,
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(10)),
@@ -58,14 +52,13 @@ class MyDialog {
                         ),
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
+                            onTap: onTap,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: AppColors.bbibic,
                                 borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(10)),
+                                  bottomRight: Radius.circular(10),
+                                ),
                               ),
                               alignment: Alignment.center,
                               child: Text(colorMenuText,
