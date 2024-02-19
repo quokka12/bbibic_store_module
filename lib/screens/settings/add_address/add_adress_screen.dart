@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:kpostal/kpostal.dart';
 import 'package:provider/provider.dart';
 
-import '../../theme/app_colors.dart';
-import '../../theme/app_decorations.dart';
-import '../../theme/app_text_styles.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_decorations.dart';
+import '../../../theme/app_text_styles.dart';
+import '../../widgets/my_app_bar.dart';
 
 class AddAddressScreen extends StatefulWidget {
   const AddAddressScreen({super.key});
@@ -34,7 +34,6 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final addressProvider = Provider.of<AddressProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -59,7 +58,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   ),
                 ),
               ),
-              _addButton(addressProvider),
+              _addButton(),
             ],
           ),
         ),
@@ -177,7 +176,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     );
   }
 
-  Widget _addButton(AddressProvider addressProvider) {
+  Widget _addButton() {
+    final addressProvider = Provider.of<AddressProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Container(

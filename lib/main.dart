@@ -4,6 +4,7 @@ import 'package:bbibic_store/providers/cart_provider.dart';
 import 'package:bbibic_store/providers/category_provider.dart';
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/providers/network_provider.dart';
+import 'package:bbibic_store/providers/order_provider.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
 import 'package:bbibic_store/theme/app_themes.dart';
 import 'package:bbibic_store/view_model/goods_detail_tab_bar_view_model.dart';
@@ -50,14 +51,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => PhotoProvider()),
-        ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => CategoryProvider(context)),
         ChangeNotifierProvider(create: (context) => NetworkProvider()),
-        ChangeNotifierProvider(create: (context) => GoodsProvider()),
+        ChangeNotifierProvider(create: (context) => GoodsProvider(context)),
         ChangeNotifierProvider(
             create: (context) => GoodsDetailTabBarViewModel()),
-        ChangeNotifierProvider(create: (context) => BannerProvider()),
-        ChangeNotifierProvider(create: (context) => CartProvider()),
-        ChangeNotifierProvider(create: (context) => AddressProvider()),
+        ChangeNotifierProvider(create: (context) => BannerProvider(context)),
+        ChangeNotifierProvider(create: (context) => CartProvider(context)),
+        ChangeNotifierProvider(create: (context) => AddressProvider(context)),
+        ChangeNotifierProvider(create: (context) => OrderProvider(context)),
       ],
       child: MaterialApp.router(
         theme: AppThemes.mainTheme(),

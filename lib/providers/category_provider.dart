@@ -8,24 +8,37 @@ import '../util/toast_util.dart';
 class CategoryProvider with ChangeNotifier {
   List<String> selectedCategoryList = [];
   List<String> categoryList = [];
+
   Future<List<String>> getData(BuildContext context) async {
-    categoryList = await CategoryFirebase.getData(context);
-    return categoryList;
+    return await CategoryFirebase.getData(context);
+  }
+
+  void refresh(BuildContext context) {
+    getData(context).then((categoryList) {
+      this.categoryList = categoryList;
+      notifyListeners();
+    });
+  }
+
+  CategoryProvider(BuildContext context) {
+    refresh(context);
   }
 
   Future add(BuildContext context, String name) async {
     Category category = Category(name: name);
     AppLoadingBar.addDataLoading(context);
+
     bool isSuccess = await CategoryFirebase.add(context, category);
     Navigator.pop(context);
     if (isSuccess) {
       ToastUtil.basic("저장 완료");
+      refresh(context);
     }
-    notifyListeners();
   }
 
   Future<bool> deleted(BuildContext context, String name) async {
     bool isSuccess = await CategoryFirebase.delete(context, name)!;
+    refresh(context);
     notifyListeners();
     return isSuccess;
   }
@@ -39,11 +52,6 @@ class CategoryProvider with ChangeNotifier {
 
   void unselectTag(tagName) {
     selectedCategoryList.remove(tagName);
-    notifyListeners();
-  }
-
-  void refresh(List<String> category) {
-    categoryList = category;
     notifyListeners();
   }
 

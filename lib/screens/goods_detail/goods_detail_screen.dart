@@ -4,7 +4,6 @@ import 'package:bbibic_store/screens/goods_detail/widgets/goods_detail_tab_bar.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/cart_provider.dart';
 import '../../providers/goods_provider.dart';
 import '../widgets/my_app_bar.dart';
 
@@ -20,7 +19,6 @@ class _GoodsDetailScreenState extends State<GoodsDetailScreen>
   @override
   Widget build(BuildContext context) {
     final goodsProvider = Provider.of<GoodsProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

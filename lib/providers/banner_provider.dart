@@ -13,6 +13,24 @@ import '../screens/widgets/loading_bar.dart';
 
 class BannerProvider with ChangeNotifier {
   File? banner = null;
+  List<AdBanner> bannerList = [];
+  bool isGetted = false;
+
+  Future<List<AdBanner>> getData(BuildContext context) async {
+    return await BannerFirebase.getData(context);
+  }
+
+  void refresh(BuildContext context) {
+    getData(context).then((bannerList) {
+      this.bannerList = bannerList;
+      isGetted = true;
+      notifyListeners();
+    });
+  }
+
+  BannerProvider(BuildContext context) {
+    refresh(context);
+  }
 
   Future add(BuildContext context) async {
     //예외처리
@@ -33,10 +51,9 @@ class BannerProvider with ChangeNotifier {
         return;
       }
       clear();
+      refresh(context);
       context.goNamed(RouteNames.bannerManagement);
     }
-
-    notifyListeners();
   }
 
   Future delete(BuildContext context, String bannerId) async {
@@ -45,7 +62,7 @@ class BannerProvider with ChangeNotifier {
     context.pop();
     if (isSuccess) {
       ToastUtil.basic("삭제 완료");
-      notifyListeners();
+      refresh(context);
     }
     return isSuccess;
   }

@@ -1,12 +1,13 @@
-import 'package:bbibic_store/database/firebase/goods_firebase.dart';
 import 'package:bbibic_store/database/shared_preferences/my_shared_preferences.dart';
 import 'package:bbibic_store/models/goods.dart';
 import 'package:bbibic_store/theme/app_text_styles.dart';
 import 'package:bbibic_store/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 
 import '../configs/router/route_names.dart';
+import '../database/firebase/goods_firebase.dart';
 import '../models/cart.dart';
 
 class CartProvider with ChangeNotifier {
@@ -30,13 +31,14 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteItem(int index) {
+  void deleteItem(BuildContext context, int index) {
     goodsIdList.removeAt(index);
     goodsList.removeAt(index);
     cartList.removeAt(index);
     MySharedPreferences.setData("cart", goodsIdList);
     getSelectedItemCount();
     getSelectedItemPrice();
+    refresh(context);
     notifyListeners();
   }
 
@@ -73,30 +75,40 @@ class CartProvider with ChangeNotifier {
         content: Text("해당 상품을 장바구니에 담았어요.", style: AppTextStyles.whiteColorB2),
         action: SnackBarAction(
           label: '장바구니로 이동',
-          onPressed: () {
-            getData(context);
-            context.pushNamed(RouteNames.cart);
-          },
+          onPressed: () => context.pushNamed(RouteNames.cart),
         ),
       ),
     );
-
+    refresh(context);
     notifyListeners();
   }
 
   Future getData(BuildContext context) async {
-    goodsIdList = await MySharedPreferences.getData("cart") ?? [];
-    List<Goods> tempLIst = [];
-    List<Cart> cartTempLIst = [];
-    for (String goodsId in goodsIdList) {
-      tempLIst.add(await GoodsFirebase.getDataEqualUID(context, goodsId));
-    }
-    goodsList = tempLIst;
-    for (Goods goods in goodsList) {
-      cartTempLIst.add(Cart(goods.goodsId!, goods.goodsPrice!, 0, false));
-    }
-    cartList = cartTempLIst;
-    notifyListeners();
+    return await MySharedPreferences.getData("cart");
+  }
+
+  void refresh(BuildContext context) {
+    getData(context).then((goodsIdList) async {
+      List<Goods> goodsTempList = [];
+      for (String goodsId in goodsIdList) {
+        goodsTempList
+            .add(await GoodsFirebase.getDataEqualUID(context, goodsId));
+      }
+      goodsList = goodsTempList;
+
+      List<Cart> cartTempList = [];
+      for (Goods goods in goodsList) {
+        cartTempList.add(Cart(goods.goodsId!, goods.goodsName!,
+            goods.thumbnailImages![0], goods.goodsPrice!, 0, false));
+      }
+      Logger().i(cartTempList);
+      cartList = cartTempList;
+      notifyListeners();
+    });
+  }
+
+  CartProvider(BuildContext context) {
+    refresh(context);
   }
 
   void clear() {

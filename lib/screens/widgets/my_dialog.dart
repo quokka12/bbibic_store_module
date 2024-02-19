@@ -371,7 +371,7 @@ class MyDialog {
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
-                              cartProvider.deleteItem(i);
+                              cartProvider.deleteItem(context1, i);
                             },
                             child: Container(
                               decoration: BoxDecoration(

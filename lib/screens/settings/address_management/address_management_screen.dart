@@ -1,16 +1,17 @@
 import 'package:bbibic_store/screens/widgets/my_app_bar.dart';
 import 'package:bbibic_store/screens/widgets/my_dialog.dart';
 import 'package:bbibic_store/theme/app_colors.dart';
+import 'package:bbibic_store/theme/app_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../configs/router/route_names.dart';
-import '../../models/address.dart';
-import '../../providers/address_provider.dart';
-import '../../theme/app_decorations.dart';
-import '../../theme/app_text_styles.dart';
-import '../../util/format_util.dart';
+import '../../../configs/router/route_names.dart';
+import '../../../models/address.dart';
+import '../../../providers/address_provider.dart';
+import '../../../theme/app_decorations.dart';
+import '../../../theme/app_text_styles.dart';
+import '../../../util/format_util.dart';
 
 class AddressManagementScreen extends StatelessWidget {
   const AddressManagementScreen({super.key});
@@ -18,7 +19,6 @@ class AddressManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final addressProvider = Provider.of<AddressProvider>(context);
-    addressProvider.getData(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -104,9 +104,16 @@ class AddressManagementScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 4),
-                Text(address.address, style: AppTextStyles.blackColorB2),
-                Text(address.detailedAddress,
-                    style: AppTextStyles.blackColorB2),
+                SizedBox(
+                  width: AppSizes.ratioOfHorizontal(context, 1) - 100,
+                  child:
+                      Text(address.address, style: AppTextStyles.blackColorB2),
+                ),
+                SizedBox(
+                  width: AppSizes.ratioOfHorizontal(context, 1) - 100,
+                  child: Text(address.detailedAddress,
+                      style: AppTextStyles.blackColorB2),
+                ),
                 SizedBox(height: 4),
                 Text(
                     "공동 현관 비밀번호 : ${FormatUtil.securityFormat(address.securityCode)}",

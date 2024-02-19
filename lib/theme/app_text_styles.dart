@@ -17,6 +17,11 @@ class AppTextStyles {
   static final C2 = 10.0;
   /* bbibicColor */
   static final bbibicColorH1 = TextStyle(color: AppColors.bbibic, fontSize: S1);
+  static final bbibicColorS1Bold = TextStyle(
+    color: AppColors.bbibic,
+    fontSize: S1,
+    fontWeight: FontWeight.bold,
+  );
 
   /* whiteColor */
   static final whiteColorB1 =

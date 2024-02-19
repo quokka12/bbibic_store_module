@@ -1,17 +1,15 @@
-import 'package:bbibic_store/screens/home/widgets/goods_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../configs/router/route_names.dart';
-import '../../../database/firebase/goods_firebase.dart';
-import '../../../models/goods.dart';
-import '../../../providers/cart_provider.dart';
 import '../../../providers/goods_provider.dart';
 import '../../../theme/app_assets.dart';
 import '../../../theme/app_text_styles.dart';
 import '../../../util/format_util.dart';
+import 'goods_loading_widget.dart';
 
 class GoodsMostRecentListWidget extends StatelessWidget {
   const GoodsMostRecentListWidget({super.key});
@@ -64,91 +62,86 @@ class GoodsMostRecentListWidget extends StatelessWidget {
   }
 
   Widget _goodsListHelper(BuildContext context) {
-    final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
-    return FutureBuilder<List<Goods>>(
-      future: GoodsFirebase.getDataSortByCreatedDate(context),
-      builder: (BuildContext context, AsyncSnapshot<List<Goods>> snapshot) {
-        List<Goods>? goodsList = snapshot.data;
-        if (goodsList == null) return const GoodsLoadingWidget();
-        if (goodsList.isEmpty) {
-          return Column(
-            children: [
-              Text(
-                "곧 새로운 상품이 등록될 예정이에요!",
-                style: AppTextStyles.grey600ColorB2,
-              ),
-              Text(
-                "조금만 기다려주세요~",
-                style: AppTextStyles.grey600ColorB2,
-              ),
-            ],
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1000),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(width: 20),
-                  for (int i = 0; i < goodsList.length; i++) ...[
-                    GestureDetector(
-                      onTap: () {
-                        goodsProvider.set(goodsList[i]);
-                        cartProvider.getData(context);
-                        context.pushNamed(RouteNames.goodsDetail);
-                      },
-                      child: SizedBox(
-                        width: 160,
-                        child: Column(
-                          children: [
-                            Image.network(
-                              goodsList[i].thumbnailImages![0],
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.contain,
-                              loadingBuilder: (context, Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    width: 120,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
+    final goodsProvider = Provider.of<GoodsProvider>(context);
+    return !goodsProvider.isGetted
+        ? const GoodsLoadingWidget()
+        : goodsProvider.mostRecentGoodsList.isEmpty
+            ? _noDataHelper()
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    for (int i = 0;
+                        i < goodsProvider.mostRecentGoodsList.length;
+                        i++) ...[
+                      GestureDetector(
+                        onTap: () {
+                          goodsProvider
+                              .set(goodsProvider.mostRecentGoodsList[i]);
+                          context.pushNamed(RouteNames.goodsDetail);
+                        },
+                        child: SizedBox(
+                          width: 160,
+                          child: Column(
+                            children: [
+                              Image.network(
+                                goodsProvider
+                                    .mostRecentGoodsList[i].thumbnailImages![0],
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                                loadingBuilder: (context, Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      width: 120,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                            Text(
-                              "${goodsList[i].goodsName}",
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.blackColorB1,
-                            ),
-                            Text(
-                              FormatUtil.priceFormat(goodsList[i].goodsPrice!),
-                              style: AppTextStyles.blackColorB2Bold,
-                            ),
-                          ],
+                                  );
+                                },
+                              ),
+                              Text(
+                                "${goodsProvider.mostRecentGoodsList[i].goodsName}",
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.blackColorB1,
+                              ),
+                              Text(
+                                FormatUtil.priceFormat(goodsProvider
+                                    .mostRecentGoodsList[i].goodsPrice!),
+                                style: AppTextStyles.blackColorB2Bold,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                  ]
-                ],
-              ),
-            ),
-          );
-        }
-        return const GoodsLoadingWidget();
-      },
+                      const SizedBox(width: 16),
+                    ]
+                  ],
+                ),
+              );
+  }
+
+  Widget _noDataHelper() {
+    return Column(
+      children: [
+        Text(
+          "곧 새로운 상품이 등록될 예정이에요!",
+          style: AppTextStyles.grey600ColorB2,
+        ),
+        Text(
+          "조금만 기다려주세요~",
+          style: AppTextStyles.grey600ColorB2,
+        ),
+      ],
     );
   }
 }

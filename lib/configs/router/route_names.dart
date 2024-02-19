@@ -14,6 +14,11 @@ class RouteNames {
   static const cart = 'cart';
   static const goodsList = 'goodsList';
   static const goodsSearch = 'goodsSearch';
+  static const payment = 'payment';
+  static const paymentSuccess = 'paymentSuccess';
+  static const paymentSuccessAnimation = 'paymentSuccessAnimation';
+  static const purchaseList = 'purchaseList';
+  static const purchaseItemDetail = 'purchaseItemDetail';
 
   /* admin */
   static const goodsManagement = 'goodsManagement';

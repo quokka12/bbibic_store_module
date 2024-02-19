@@ -1,8 +1,6 @@
-import 'package:bbibic_store/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../database/firebase/category_firebase.dart';
 import '../../../../providers/category_provider.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_decorations.dart';
@@ -47,31 +45,17 @@ class CategoryListWidget extends StatelessWidget {
 
   Widget _itemListHelper(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    return FutureBuilder<List<String>>(
-      future: categoryProvider.getData(context),
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.hasError) {
-          ToastUtil.basic("데이터를 불러올 수 없습니다. 다시 시도해주세요.");
-          return const SizedBox(); // 에러 발생 시 보여줄 위젯
-        } else {
-          List<String> categoryList = [];
-          if (snapshot.data != null) {
-            categoryList = snapshot.data!;
-          }
-          // 추출한 데이터를 활용하여 UI를 구성하거나 다른 작업을 수행할 수 있습니다.
-          return Wrap(
+    return categoryProvider.categoryList.isEmpty
+        ? SizedBox()
+        : Wrap(
             direction: Axis.horizontal,
             alignment: WrapAlignment.start,
-            spacing: 12,
-            runSpacing: 12,
             children: [
-              for (int i = 0; i < categoryList.length; i++)
-                _categoryCard(context, categoryList[i], categoryProvider),
+              for (int i = 0; i < categoryProvider.categoryList.length; i++)
+                _categoryCard(context, categoryProvider.categoryList[i],
+                    categoryProvider),
             ],
           );
-        }
-      },
-    );
   }
 
   Widget _categoryCard(
@@ -81,9 +65,6 @@ class CategoryListWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           MyDialog.categoryDeleteDialog(context, categoryProvider, name);
-          CategoryFirebase.getData(context).then((value) {
-            categoryProvider.refresh(value);
-          });
         },
         child: UnconstrainedBox(
           child: Container(

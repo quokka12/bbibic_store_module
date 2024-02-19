@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../database/firebase/goods_firebase.dart';
-import '../../../../models/goods.dart';
 import '../../../../providers/goods_provider.dart';
 import '../../../../theme/app_decorations.dart';
 import '../../../../theme/app_text_styles.dart';
@@ -16,35 +14,29 @@ class GoodsListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: FutureBuilder<List<Goods>>(
-                future: GoodsFirebase.getData(context),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Goods>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _loadingHelper();
-                  }
-
-                  if (snapshot.hasError) {
-                    // 에러 발생 시의 UI 처리
-                    return Text('에러 발생: ${snapshot.error}');
-                  }
-
-                  List<Goods>? goodsList = snapshot.data;
-                  if (snapshot.data == null ||
-                      goodsList == null ||
-                      goodsList.isEmpty) {
-                    return _noDataHelper();
-                  }
-
-                  // TODO: 받아온 데이터를 활용한 UI 구성 및 반환 처리
-                  return _dataListHelper(context, goodsProvider, goodsList);
-                })),
-      ),
-    );
+    return !goodsProvider.isGetted
+        ? _loadingHelper()
+        : goodsProvider.mostRecentGoodsList == []
+            ? _noDataHelper()
+            : Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 12),
+                        for (int i = 0;
+                            i < goodsProvider.goodsList.length;
+                            i++) ...[
+                          _itemCard(context, goodsProvider, i),
+                          const SizedBox(height: 12),
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
+              );
   }
 
   Widget _noDataHelper() {
@@ -52,131 +44,109 @@ class GoodsListWidget extends StatelessWidget {
   }
 
   Widget _loadingHelper() {
-    return SizedBox(
-      width: double.infinity,
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          for (int i = 0; i < 5; i++) ...[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: AppDecorations.buttonDecoration(Colors.white),
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(12),
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+        for (int i = 0; i < 5; i++) ...[
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: AppDecorations.buttonDecoration(Colors.white),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 150,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 150,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: 80,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 80,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: 120,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 120,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 100,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 4),
-                        Container(
-                          width: 100,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 90,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 4),
-                        Container(
-                          width: 90,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 70,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 4),
-                        Container(
-                          width: 70,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        width: 60,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          width: 60,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        const SizedBox(height: 58),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const SizedBox(height: 58),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ],
-      ),
+      ],
     );
   }
 
-  Widget _dataListHelper(BuildContext context, GoodsProvider goodsProvider,
-      List<Goods> goodsList) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 100),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            for (int i = 0; i < goodsList!.length; i++) ...[
-              _itemCard(context, goodsProvider, goodsList, i),
-              const SizedBox(height: 12),
-            ]
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _itemCard(BuildContext context, GoodsProvider goodsProvider,
-      List<Goods> goodsList, int i) {
+  Widget _itemCard(BuildContext context, GoodsProvider goodsProvider, int i) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -190,7 +160,7 @@ class GoodsListWidget extends StatelessWidget {
               runSpacing: 12,
               children: [
                 Image.network(
-                  goodsList[i].thumbnailImages![0],
+                  goodsProvider.goodsList[i].thumbnailImages![0],
                   width: 100,
                   height: 100,
                   fit: BoxFit.contain,
@@ -201,34 +171,35 @@ class GoodsListWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${goodsList[i].goodsName}",
+                        "${goodsProvider.goodsList[i].goodsName}",
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.blackColorB1Bold,
                       ),
                       Text(
-                        FormatUtil.priceFormat(goodsList[i].goodsPrice!),
+                        FormatUtil.priceFormat(
+                            goodsProvider.goodsList[i].goodsPrice!),
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.blackColorB1,
                       ),
                       Text(
-                        goodsList[i].status ? "판매중" : "판매정지",
+                        goodsProvider.goodsList[i].status ? "판매중" : "판매정지",
                         overflow: TextOverflow.ellipsis,
-                        style: goodsList[i].status
+                        style: goodsProvider.goodsList[i].status
                             ? AppTextStyles.blueColorB1
                             : AppTextStyles.redColorB1,
                       ),
                       Text(
-                        "판매 수량 : ${goodsList[i].goodsSell}",
+                        "판매 수량 : ${goodsProvider.goodsList[i].goodsSell}",
                         style: AppTextStyles.blackColorB1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        "조회 수 : ${goodsList[i].views}",
+                        "조회 수 : ${goodsProvider.goodsList[i].views}",
                         style: AppTextStyles.blackColorB1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        "${goodsList[i].createdDate}",
+                        "${goodsProvider.goodsList[i].createdDate}",
                         style: AppTextStyles.grey600ColorB2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -238,11 +209,11 @@ class GoodsListWidget extends StatelessWidget {
                       ),
                       Switch(
                         activeColor: Colors.blueAccent,
-                        value: goodsList[i].status,
+                        value: goodsProvider.goodsList[i].status,
                         onChanged: (value) => goodsProvider.changeStatus(
                             context,
-                            goodsList[i].goodsId!,
-                            !goodsList[i].status),
+                            goodsProvider.goodsList[i].goodsId!,
+                            !goodsProvider.goodsList[i].status),
                       ),
                     ],
                   ),
@@ -257,7 +228,7 @@ class GoodsListWidget extends StatelessWidget {
               onPressed: () => MyDialog.goodsDeleteDialog(
                 context,
                 goodsProvider,
-                goodsList[i],
+                goodsProvider.goodsList[i],
               ),
               child: Text("상품 삭제", style: AppTextStyles.whiteColorB2),
             ),

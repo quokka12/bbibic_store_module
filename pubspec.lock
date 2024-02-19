@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: c9c85fedbe2188b95133cbe960e16f5f448860f7133330e272edbbca5893ddc6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
   async:
     dependency: transitive
     description:
@@ -49,6 +57,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  bootpay:
+    dependency: "direct main"
+    description:
+      name: bootpay
+      sha256: "55fffba79fb128dd605c7657e4b817da783def4a6d90e0174fb09d4ed88c0fa1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.5"
+  bootpay_webview_flutter:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter
+      sha256: de2c193d93b2d797ea837aa1c43c612280ee8eafeb3fd424a45ae21db490f583
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.44"
+  bootpay_webview_flutter_android:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_android
+      sha256: d2cdfc1915e6bf2bf676c9b9a0c756d44f82cc1c1911300ea9b2c35249a216ca
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.44"
+  bootpay_webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_platform_interface
+      sha256: "027f3f6511fe485ccb0bdb8afbf565ef1a3945ffb7ecaa4cd357a1b33c10819f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.51"
+  bootpay_webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_wkwebview
+      sha256: "1bc2bd3568a4e78ed25402301b890d3e0c8c40b5a28a43088e88685f6634f775"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.51"
   characters:
     dependency: transitive
     description:
@@ -177,6 +225,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.9"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -392,6 +448,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  get:
+    dependency: transitive
+    description:
+      name: get
+      sha256: e4e7335ede17452b391ed3b2ede016545706c01a02292a6c97619705e7d2a85e
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.6"
   go_router:
     dependency: "direct main"
     description:
@@ -845,6 +909,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:

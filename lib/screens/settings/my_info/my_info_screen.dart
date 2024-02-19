@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../configs/router/route_names.dart';
-import '../../providers/cart_provider.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../configs/router/route_names.dart';
+import '../../../providers/cart_provider.dart';
+import '../../widgets/my_app_bar.dart';
 
 class MyInfoScreen extends StatelessWidget {
   const MyInfoScreen({Key? key}) : super(key: key);
@@ -84,7 +84,7 @@ class MyInfoScreen extends StatelessWidget {
                 child: Text("배송지 관리", style: AppTextStyles.blackColorB1Bold),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () => context.pushNamed(RouteNames.purchaseList),
                 child: Text("구매/배송 목록", style: AppTextStyles.blackColorB1Bold),
               ),
               TextButton(

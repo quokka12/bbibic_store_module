@@ -118,12 +118,7 @@ class GoodsFirebase {
   static Future<List<Goods>> getDataSortByCreatedDate(
       BuildContext context) async {
     List<Goods> goodsList = [];
-    bool isNetwork = await Provider.of<NetworkProvider>(context, listen: false)
-        .checkNetwork();
     try {
-      // 인터넷 상태 확인
-      if (!isNetwork) return goodsList;
-
       await _collectionReference
           .where('status', isEqualTo: true)
           .orderBy("createdDate", descending: true)
@@ -131,9 +126,6 @@ class GoodsFirebase {
           .then(
         (querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
-            if (docSnapshot.data() == null) {
-              return Goods(status: true);
-            }
             final data = docSnapshot.data();
             goodsList.add(Goods.fromMap(data));
           }
@@ -150,12 +142,7 @@ class GoodsFirebase {
   static Future<List<Goods>> getDataSortByPopularity(
       BuildContext context) async {
     List<Goods> goodsList = [];
-    bool isNetwork = await Provider.of<NetworkProvider>(context, listen: false)
-        .checkNetwork();
     try {
-      // 인터넷 상태 확인
-      if (!isNetwork) return goodsList;
-
       await _collectionReference
           .where('status', isEqualTo: true)
           .orderBy("goodsSell", descending: true)
@@ -176,11 +163,6 @@ class GoodsFirebase {
       Logger().e(e);
     }
     return goodsList;
-  }
-
-  static Stream<List<Goods>> getDataSortByPopularityForStream(
-      BuildContext context) {
-    return Stream.fromFuture(getDataSortByPopularity(context));
   }
 
   /* 판매여부 변경 */

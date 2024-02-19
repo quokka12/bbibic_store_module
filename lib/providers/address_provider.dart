@@ -30,25 +30,35 @@ class AddressProvider with ChangeNotifier {
     Navigator.pop(context);
     if (isSuccess) {
       ToastUtil.basic("저장 완료");
+      refresh(context);
       context.pop();
     } else {
       ToastUtil.basic("저장 실패. 다시 시도해주세요.");
     }
-    notifyListeners();
   }
 
-  Future getData(BuildContext context) async {
-    addressList = await AddressFirebase.getData(context, 'test');
-    notifyListeners();
+  Future<List<Address>> getData(BuildContext context) async {
+    return await AddressFirebase.getData(context, 'test');
+  }
+
+  void refresh(BuildContext context) {
+    getData(context).then((addressList) {
+      this.addressList = addressList;
+      notifyListeners();
+    });
+  }
+
+  AddressProvider(BuildContext context) {
+    refresh(context);
   }
 
   Future delete(BuildContext context, String addressId) async {
     bool isSuccess = await AddressFirebase.delete(context, addressId);
     if (isSuccess) {
       ToastUtil.basic("삭제 완료");
+      refresh(context);
     } else {
       ToastUtil.basic("삭제 실패. 다시 시도해주세요.");
     }
-    notifyListeners();
   }
 }

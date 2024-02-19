@@ -1,4 +1,3 @@
-import 'package:bbibic_store/util/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,6 @@ class AddGoodsCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = Provider.of<CategoryProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
@@ -23,7 +21,7 @@ class AddGoodsCategoryWidget extends StatelessWidget {
           const SizedBox(width: 4),
           _categoryInfoText(),
           const SizedBox(height: 12),
-          _itemList(context, categoryProvider),
+          _itemList(context),
         ],
       ),
     );
@@ -49,29 +47,19 @@ class AddGoodsCategoryWidget extends StatelessWidget {
     );
   }
 
-  Widget _itemList(BuildContext context, CategoryProvider categoryProvider) {
-    return FutureBuilder<List<String>>(
-      future: categoryProvider.getData(context),
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-        if (snapshot.hasError) {
-          ToastUtil.basic("데이터를 불러올 수 없습니다. 다시 시도해주세요.");
-          return const SizedBox(); // 에러 발생 시 보여줄 위젯
-        } else {
-          List<String> categoryList = snapshot.data!; // List<String> 형태의 데이터 추출
-          // 추출한 데이터를 활용하여 UI를 구성하거나 다른 작업을 수행할 수 있습니다.
-          return Wrap(
+  Widget _itemList(BuildContext context) {
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    return categoryProvider.categoryList.isEmpty
+        ? const SizedBox()
+        : Wrap(
             direction: Axis.horizontal,
             alignment: WrapAlignment.start,
-            spacing: 12,
-            runSpacing: 12,
             children: [
-              for (int i = 0; i < categoryList.length; i++)
-                _categoryCard(categoryList[i], categoryProvider),
+              for (int i = 0; i < categoryProvider.categoryList.length; i++)
+                _categoryCard(
+                    categoryProvider.categoryList[i], categoryProvider),
             ],
           );
-        }
-      },
-    );
   }
 
   Widget _categoryCard(String name, CategoryProvider categoryProvider) {
