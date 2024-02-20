@@ -1,19 +1,15 @@
+import 'package:bbibic_store/screens/goods_list/widgets/goods_list_search_app_bar.dart';
 import 'package:bbibic_store/theme/app_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../configs/router/route_names.dart';
-import '../../database/firebase/goods_firebase.dart';
 import '../../models/goods.dart';
-import '../../providers/cart_provider.dart';
-import '../../providers/category_provider.dart';
 import '../../providers/goods_provider.dart';
-import '../../theme/app_colors.dart';
 import '../../theme/app_decorations.dart';
 import '../../theme/app_text_styles.dart';
 import '../../util/format_util.dart';
-import '../../util/toast_util.dart';
 
 class GoodsListScreen extends StatelessWidget {
   String searchWord = '';
@@ -23,257 +19,108 @@ class GoodsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoodsProvider goodsProvider = Provider.of<GoodsProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
-    final categoryProvider = Provider.of<CategoryProvider>(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.grey300,
-                    blurRadius: 1,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: 52,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 48,
-                          child: IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              size: 24,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8,
-                              bottom: 8,
-                              right: 8,
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: "원하시는 상품이 있으신가요?",
-                                hintStyle: AppTextStyles.grey600ColorB2,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Icon(
-                          Icons.search_rounded,
-                          size: 28,
-                          color: AppColors.grey800,
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, bottom: 4),
-                    child: Row(
-                      children: [
-                        Text("태그", style: AppTextStyles.blackColorB2Bold),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: FutureBuilder<List<String>>(
-                            future: categoryProvider.getData(context),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<String>> snapshot) {
-                              if (snapshot.hasError) {
-                                ToastUtil.basic("데이터를 불러올 수 없습니다. 다시 시도해주세요.");
-                                return const SizedBox(); // 에러 발생 시 보여줄 위젯
-                              } else {
-                                List<String> categoryList = [];
-                                if (snapshot.data != null) {
-                                  categoryList = snapshot.data!;
-                                }
-                                return SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      for (int i = 0;
-                                          i < categoryList.length;
-                                          i++)
-                                        _categoryCard(
-                                            categoryList[i], categoryProvider),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(filter, style: AppTextStyles.grey600ColorC1),
-                      Icon(
-                        Icons.arrow_drop_down_rounded,
-                        color: AppColors.grey600,
-                        size: 28,
-                      ),
-                      SizedBox(width: 12),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                ],
-              ),
-            ),
-            Expanded(
-              child: FutureBuilder<List<Goods>>(
-                future: GoodsFirebase.getDataSortByCreatedDate(context),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Goods>> snapshot) {
-                  List<Goods>? goodsList = snapshot.data;
-                  if (goodsList == null) return SizedBox();
-                  if (goodsList.isEmpty) {
-                    return Column(
-                      children: [
-                        Text(
-                          "곧 새로운 상품이 등록될 예정이에요!",
-                          style: AppTextStyles.grey600ColorB2,
-                        ),
-                        Text(
-                          "조금만 기다려주세요~",
-                          style: AppTextStyles.grey600ColorB2,
-                        ),
-                      ],
-                    );
-                  }
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 4),
-                          for (int i = 0; i < goodsList.length; i++) ...[
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 6),
-                              child: GestureDetector(
-                                onTap: () {
-                                  goodsProvider.set(goodsList[i]);
-                                  cartProvider.getData(context);
-                                  context.pushNamed(RouteNames.goodsDetail);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: AppDecorations.buttonDecoration(
-                                      Colors.white),
-                                  width:
-                                      AppSizes.ratioOfHorizontal(context, 1) -
-                                          16,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.network(
-                                        goodsList[i].thumbnailImages![0],
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "${goodsList[i].goodsName}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppTextStyles.blackColorB2,
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            FormatUtil.priceFormat(
-                                                goodsList[i].goodsPrice!),
-                                            style:
-                                                AppTextStyles.blackColorB1Bold,
-                                          ),
-                                          SizedBox(height: 24),
-                                          Row(
-                                            children: [
-                                              for (String tag in goodsList[i]
-                                                  .categoryId!) ...[
-                                                Text(
-                                                  "#${tag}",
-                                                  style: AppTextStyles
-                                                      .grey600ColorC1,
-                                                ),
-                                                SizedBox(width: 4),
-                                              ],
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                          ]
-                        ],
-                      ),
-                    );
-                  }
-                  return SizedBox();
-                },
-              ),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              GoodsListSearchAppBar(searchWord: searchWord, filter: filter),
+              !goodsProvider.isGetted
+                  ? const SizedBox()
+                  : goodsProvider.mostRecentGoodsList.isEmpty
+                      ? _comingSoonHelper()
+                      : Expanded(
+                          child: goodsListHelper(context, goodsProvider)),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _categoryCard(String name, CategoryProvider categoryProvider) {
+  Widget _comingSoonHelper() {
+    return Column(
+      children: [
+        Text(
+          "곧 새로운 상품이 등록될 예정이에요!",
+          style: AppTextStyles.grey600ColorB2,
+        ),
+        Text(
+          "조금만 기다려주세요~",
+          style: AppTextStyles.grey600ColorB2,
+        ),
+      ],
+    );
+  }
+
+  Widget goodsListHelper(BuildContext context, GoodsProvider goodsProvider) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          const SizedBox(height: 4),
+          for (Goods goods in goodsProvider.mostRecentGoodsList) ...[
+            goodsCardHelper(context, goodsProvider, goods),
+            const SizedBox(width: 16),
+          ]
+        ],
+      ),
+    );
+  }
+
+  Widget goodsCardHelper(
+      BuildContext context, GoodsProvider goodsProvider, Goods goods) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
-      child: InkWell(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: GestureDetector(
         onTap: () {
-          if (categoryProvider.selectedCategoryList.contains(name)) {
-            categoryProvider.unselectTag(name);
-          } else {
-            categoryProvider.selectTag(name);
-          }
+          goodsProvider.set(goods);
+          context.pushNamed(RouteNames.goodsDetail);
         },
-        child: UnconstrainedBox(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-            decoration: categoryProvider.selectedCategoryList.contains(name)
-                ? AppDecorations.selectedTagDecoration()
-                : AppDecorations.tagDecoration(),
-            child: Text(
-              "#$name",
-              style: categoryProvider.selectedCategoryList.contains(name)
-                  ? AppTextStyles.blackColorC1
-                  : AppTextStyles.grey600ColorC1,
-            ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: AppDecorations.buttonDecoration(Colors.white),
+          width: AppSizes.ratioOfHorizontal(context, 1) - 16,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(
+                goods.thumbnailImages![0],
+                width: 100,
+                height: 100,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: AppSizes.ratioOfHorizontal(context, 1) - 164,
+                    child: Text(
+                      "${goods.goodsName}",
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.blackColorB2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    FormatUtil.priceFormat(goods.goodsPrice!),
+                    style: AppTextStyles.blackColorB1Bold,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      for (String tag in goods.categoryId!) ...[
+                        Text("#$tag", style: AppTextStyles.grey600ColorC1),
+                        const SizedBox(width: 4),
+                      ],
+                    ],
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),

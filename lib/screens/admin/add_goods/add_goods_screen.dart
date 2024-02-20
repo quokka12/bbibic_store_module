@@ -1,4 +1,3 @@
-import 'package:bbibic_store/models/goods.dart';
 import 'package:bbibic_store/providers/photo_provider.dart';
 import 'package:bbibic_store/screens/admin/add_goods/widgets/add_goods_category_widget.dart';
 import 'package:bbibic_store/screens/admin/add_goods/widgets/detail_image_widget.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/goods.dart';
 import '../../../providers/category_provider.dart';
 import '../../../providers/goods_provider.dart';
 import '../../../theme/app_decorations.dart';
@@ -50,11 +50,15 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
             key: _formKey,
             child: Column(
               children: [
-                MyAppBar.basicAppBar(context, "상품 추가", () {
-                  categoryProvider.clear();
-                  photoProvider.clear();
-                  Navigator.pop(context);
-                }),
+                MyAppBar.basicAppBar(
+                  context,
+                  "상품 추가",
+                  () {
+                    categoryProvider.clear();
+                    photoProvider.clear();
+                    Navigator.pop(context);
+                  },
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -169,7 +173,9 @@ class _AddGoodsScreenState extends State<AddGoodsScreen> {
               Goods(
                 categoryId: categoryProvider.selectedCategoryList,
                 goodsName: controllerName.text,
-                goodsPrice: int.tryParse(controllerPrice.text) ?? 0,
+                goodsPrice: int.tryParse(
+                        FormatUtil.priceDataFormat(controllerPrice.text)) ??
+                    0,
                 status: true,
                 goodsSell: 0,
                 views: 0,

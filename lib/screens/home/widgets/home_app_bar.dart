@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../../../configs/router/route_names.dart';
-import '../../../providers/cart_provider.dart';
 import '../../../theme/app_colors.dart';
 import '../../../theme/app_text_styles.dart';
 
@@ -66,12 +64,10 @@ class HomeAppBar extends StatelessWidget {
   }
 
   Widget _menuButtonHelper(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Row(
       children: [
         GestureDetector(
           onTap: () {
-            cartProvider.getData(context);
             context.pushNamed(RouteNames.cart);
           },
           child: const Icon(Icons.shopping_cart_outlined, size: 24),

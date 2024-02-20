@@ -1,3 +1,4 @@
+import 'package:bbibic_store/theme/app_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -149,9 +150,12 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(orderProvider.orderCartList[index].goodsName,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.blackColorS2Bold),
+                    SizedBox(
+                      width: AppSizes.ratioOfHorizontal(context, 1) - 164,
+                      child: Text(orderProvider.orderCartList[index].goodsName,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.blackColorS2Bold),
+                    ),
                     Text(
                         FormatUtil.priceFormat(
                             orderProvider.orderCartList[index].goodsPrice!),

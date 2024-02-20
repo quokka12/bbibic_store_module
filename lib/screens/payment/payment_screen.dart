@@ -1,5 +1,6 @@
 import 'package:bbibic_store/providers/goods_provider.dart';
 import 'package:bbibic_store/providers/order_provider.dart';
+import 'package:bbibic_store/theme/app_sizes.dart';
 import 'package:bbibic_store/util/toast_util.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -43,14 +44,17 @@ class _PayMentScreenState extends State<PayMentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              MyAppBar.basicAppBar(context, "결제하기", null),
-              goodsListHelper(context),
-              _buyButton(context),
-            ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                MyAppBar.basicAppBar(context, "결제하기", null),
+                goodsListHelper(context),
+                _buyButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -215,9 +219,12 @@ class _PayMentScreenState extends State<PayMentScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${goods.goodsName}",
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.blackColorS2Bold),
+                    Container(
+                      width: AppSizes.ratioOfHorizontal(context, 1) - 164,
+                      child: Text("${goods.goodsName}",
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.blackColorS2Bold),
+                    ),
                     Text(FormatUtil.priceFormat(goods.goodsPrice!),
                         style: AppTextStyles.blackColorB2),
                     Row(

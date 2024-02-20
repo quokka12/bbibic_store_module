@@ -109,15 +109,24 @@ class AppTextStyles {
 
   /* underline */
   static final underline = TextStyle(
-      color: Colors.black,
-      fontSize: B2,
-      height: 1.5,
-      decoration: TextDecoration.underline,
-      decorationColor: Colors.black);
+    color: Colors.black,
+    fontSize: B2,
+    height: 1.5,
+    decoration: TextDecoration.underline,
+    decorationColor: Colors.black,
+  );
   static final underlineC1 = TextStyle(
-      color: Colors.black,
-      fontSize: C1,
-      height: 1.5,
-      decoration: TextDecoration.underline,
-      decorationColor: Colors.black);
+    color: Colors.black,
+    fontSize: C1,
+    height: 1.5,
+    decoration: TextDecoration.underline,
+    decorationColor: Colors.black,
+  );
+  static final underlineGrey600C1 = TextStyle(
+    color: AppColors.grey600,
+    fontSize: C1,
+    height: 1.5,
+    decoration: TextDecoration.underline,
+    decorationColor: AppColors.grey600,
+  );
 }

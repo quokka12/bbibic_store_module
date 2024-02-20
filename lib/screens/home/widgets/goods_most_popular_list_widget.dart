@@ -76,8 +76,7 @@ class GoodsMostPopularListWidget extends StatelessWidget {
                         i++) ...[
                       GestureDetector(
                         onTap: () {
-                          goodsProvider
-                              .set(goodsProvider.mostRecentGoodsList[i]);
+                          goodsProvider.set(goodsProvider.popularGoodsList[i]);
                           context.pushNamed(RouteNames.goodsDetail);
                         },
                         child: SizedBox(

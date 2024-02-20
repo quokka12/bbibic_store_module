@@ -7,6 +7,11 @@ class FormatUtil {
     return numberFormat.format(price);
   }
 
+  static String priceDataFormat(String price) {
+    String numericString = price.replaceAll(RegExp(r'[^0-9]'), '');
+    return numericString;
+  }
+
   static String securityFormat(String value) {
     return value.replaceAll(RegExp(r'[0-9]'), '*');
   }

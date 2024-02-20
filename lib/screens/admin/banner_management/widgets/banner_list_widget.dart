@@ -54,16 +54,7 @@ class BannerListWidget extends StatelessWidget {
                             if (loadingProgress == null) {
                               return child;
                             }
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
-                                width: double.infinity,
-                                height:
-                                    AppSizes.ratioOfVertical(context, 0.097),
-                                color: Colors.black,
-                              ),
-                            );
+                            return _cardLoadingHelper(context);
                           },
                         ),
                       ),
@@ -92,6 +83,18 @@ class BannerListWidget extends StatelessWidget {
             const SizedBox(height: 12),
           ]
         ],
+      ),
+    );
+  }
+
+  Widget _cardLoadingHelper(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        width: double.infinity,
+        height: AppSizes.ratioOfVertical(context, 0.097),
+        color: Colors.black,
       ),
     );
   }

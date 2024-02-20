@@ -4,6 +4,7 @@ import 'package:bbibic_store/screens/admin/add_banner/add_banner_screen.dart';
 import 'package:bbibic_store/screens/cart/cart_screen.dart';
 import 'package:bbibic_store/screens/goods_detail/goods_detail_screen.dart';
 import 'package:bbibic_store/screens/goods_search/goods_search_screen.dart';
+import 'package:bbibic_store/screens/payment/payment_in_progress_screen.dart';
 import 'package:bbibic_store/screens/payment/payment_screen.dart';
 import 'package:bbibic_store/screens/payment/payment_success/payment_success_animation_screen.dart';
 import 'package:bbibic_store/screens/service_web_view/service_center_screen.dart';
@@ -35,16 +36,25 @@ class AppRouter {
             ScreenTrainsition.fadeTransition(state, const HomeScreen()),
         routes: [
           GoRoute(
-              name: RouteNames.goodsDetail,
-              path: RouteNames.goodsDetail,
-              builder: (context, state) => const GoodsDetailScreen(),
-              routes: [
-                GoRoute(
-                  name: RouteNames.payment,
-                  path: RouteNames.payment,
-                  builder: (context, state) => PayMentScreen(),
-                ),
-              ]),
+            name: RouteNames.goodsDetail,
+            path: RouteNames.goodsDetail,
+            builder: (context, state) => const GoodsDetailScreen(),
+            routes: [
+              GoRoute(
+                name: RouteNames.payment,
+                path: RouteNames.payment,
+                builder: (context, state) => PayMentScreen(),
+                routes: [
+                  GoRoute(
+                    name: RouteNames.paymentInProgress,
+                    path: RouteNames.paymentInProgress,
+                    builder: (context, state) =>
+                        const PaymentInProgressScreen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
           GoRoute(
             name: RouteNames.goodsSearch,
             path: RouteNames.goodsSearch,

@@ -69,7 +69,8 @@ class CartProvider with ChangeNotifier {
     }
     goodsList.add(goods);
     goodsIdList.add(goods.goodsId!);
-    MySharedPreferences.setData("cart", goodsIdList);
+    Logger().i(goodsIdList);
+    await MySharedPreferences.setData("cart", goodsIdList);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("해당 상품을 장바구니에 담았어요.", style: AppTextStyles.whiteColorB2),
@@ -80,7 +81,6 @@ class CartProvider with ChangeNotifier {
       ),
     );
     refresh(context);
-    notifyListeners();
   }
 
   Future getData(BuildContext context) async {
@@ -101,7 +101,6 @@ class CartProvider with ChangeNotifier {
         cartTempList.add(Cart(goods.goodsId!, goods.goodsName!,
             goods.thumbnailImages![0], goods.goodsPrice!, 0, false));
       }
-      Logger().i(cartTempList);
       cartList = cartTempList;
       notifyListeners();
     });

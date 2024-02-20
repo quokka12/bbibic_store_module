@@ -1,5 +1,3 @@
-import 'package:bbibic_store/theme/app_text_styles.dart';
-import 'package:bbibic_store/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +5,10 @@ import 'package:provider/provider.dart';
 import '../../../configs/router/route_names.dart';
 import '../../../models/order.dart';
 import '../../../providers/order_provider.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_sizes.dart';
+import '../../../theme/app_text_styles.dart';
+import '../../../util/format_util.dart';
 import '../../widgets/my_app_bar.dart';
 
 class PurchaseListScreen extends StatelessWidget {
@@ -24,7 +26,7 @@ class PurchaseListScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     for (Order order in orderProvider.orderList) ...[
                       GestureDetector(
                         onTap: () {
@@ -33,123 +35,140 @@ class PurchaseListScreen extends StatelessWidget {
                         },
                         child: Container(
                           width: double.infinity,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      order.recipientName,
-                                      style: AppTextStyles.blackColorB1Bold,
-                                    ),
-                                    Text(
-                                      order.recipientPhone,
-                                      style: AppTextStyles.blackColorB1,
-                                    ),
-                                    Text(
-                                      "배송 준비중",
-                                      style: AppTextStyles.redColorB1,
-                                    ),
-                                    Row(
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "주소 : ",
+                                          order.recipientName,
+                                          style: AppTextStyles.blackColorB1Bold,
+                                        ),
+                                        Text(
+                                          order.recipientPhone,
+                                          style: AppTextStyles.blackColorB1,
+                                        ),
+                                      ],
+                                    ),
+                                    const Icon(Icons.navigate_next_rounded,
+                                        size: 36),
+                                  ],
+                                ),
+                                Text(
+                                  "배송 준비중",
+                                  style: AppTextStyles.redColorB1,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "주소 : ",
+                                      style: AppTextStyles.blackColorB2,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          order.recipientAddress["address"]!,
                                           style: AppTextStyles.blackColorB2,
                                         ),
-                                        Column(
+                                        Text(
+                                          order.recipientAddress[
+                                              "detailedAddress"]!,
+                                          style: AppTextStyles.blackColorB2,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "요청사항 : ${order.request}",
+                                  style: AppTextStyles.blackColorB2,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "구매 목록",
+                                  style: AppTextStyles.blackColorB1Bold,
+                                ),
+                                const SizedBox(height: 8),
+                                for (Map<String, dynamic> goods
+                                    in order.goodsList) ...[
+                                  Row(
+                                    children: [
+                                      Image.network(
+                                        goods["goodsImage"],
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Expanded(
+                                        child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              order
-                                                  .recipientAddress["address"]!,
-                                              style: AppTextStyles.blackColorB2,
-                                            ),
-                                            Text(
-                                              order.recipientAddress[
-                                                  "detailedAddress"]!,
-                                              style: AppTextStyles.blackColorB2,
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Text(
-                                      "요청사항 : ${order.request}",
-                                      style: AppTextStyles.blackColorB2,
-                                    ),
-                                    SizedBox(height: 12),
-                                    for (Map<String, dynamic> goods
-                                        in order.goodsList) ...[
-                                      Row(
-                                        children: [
-                                          Image.network(
-                                            goods["goodsImage"],
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          Expanded(
-                                            child: Column(
+                                            Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(goods["goodsName"],
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: AppTextStyles
-                                                            .blackColorB2Bold),
-                                                    Text(
-                                                        FormatUtil.priceFormat(
-                                                            goods[
-                                                                "goodsPrice"]),
-                                                        style: AppTextStyles
-                                                            .blackColorC1),
-                                                  ],
-                                                ),
+                                                Text(goods["goodsName"],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: AppTextStyles
+                                                        .blackColorB2Bold),
+                                                Text(
+                                                    FormatUtil.priceFormat(
+                                                        goods["goodsPrice"]),
+                                                    style: AppTextStyles
+                                                        .blackColorC1),
                                               ],
                                             ),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              "${goods["count"]} 개",
-                                              style: AppTextStyles
-                                                  .blackColorB2Bold,
-                                            ),
-                                          )
-                                        ],
+                                          ],
+                                        ),
                                       ),
+                                      Container(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "${goods["count"]} 개",
+                                          style: AppTextStyles.blackColorB2Bold,
+                                        ),
+                                      )
                                     ],
-                                    SizedBox(height: 12),
-                                    Text(
-                                      "총 결제 금액 : ${FormatUtil.priceFormat(order.totalPrice)}",
-                                      style: AppTextStyles.blackColorB2Bold,
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "결제 일자 : ${order.orderDate}",
-                                      style: AppTextStyles.grey600ColorC1,
-                                    ),
-                                  ],
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    width:
+                                        AppSizes.ratioOfHorizontal(context, 1),
+                                    decoration: const BoxDecoration(
+                                        color: AppColors.grey300),
+                                  ),
+                                ],
+                                const SizedBox(height: 20),
+                                Text(
+                                  "총 결제 금액 : ${FormatUtil.priceFormat(order.totalPrice)}",
+                                  style: AppTextStyles.blackColorB2Bold,
                                 ),
-                              ),
-                              Icon(Icons.navigate_next_rounded, size: 36),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  "결제 일자 : ${order.orderDate}",
+                                  style: AppTextStyles.grey600ColorC1,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      )
+                      ),
+                      const SizedBox(height: 12),
                     ]
                   ],
                 ),

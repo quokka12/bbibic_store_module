@@ -4,16 +4,18 @@ import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../configs/router/route_names.dart';
 import '../models/cart.dart';
 import '../models/goods.dart';
 import '../models/order.dart';
+import '../theme/app_text_styles.dart';
 import 'goods_provider.dart';
 
 class OrderProvider with ChangeNotifier {
@@ -94,11 +96,33 @@ class OrderProvider with ChangeNotifier {
   }
 
   void bootpayTest(BuildContext context) {
+    bool isSuccess = false;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: () {
+              return Future(() => false); //뒤로가기 막음
+            },
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset("assets/animations/payment_in_progress.json",
+                        width: 160, fit: BoxFit.contain),
+                    Text("결제 진행중입니다...", style: AppTextStyles.blackColorB1),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
     Payload payload = getPayload(context);
     if (kIsWeb) {
       payload.extra?.openType = "iframe";
     }
-
     Bootpay().requestPayment(
       context: context,
       payload: payload,
@@ -110,18 +134,24 @@ class OrderProvider with ChangeNotifier {
       onError: (String data) {
         print('------- onError: $data');
       },
-      onClose: () {
+      onClose: () async {
         print('------- onClose');
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
-        add(context);
-        context.goNamed(RouteNames.paymentSuccessAnimation);
+        if (isSuccess) {
+          await add(context);
+          refresh(context);
+          context.goNamed(RouteNames.paymentSuccessAnimation);
+        } else {
+          Navigator.pop(context);
+        }
       },
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
       onConfirm: (String data) {
         print('------- onConfirm: $data');
+
         /**
             1. 바로 승인하고자 할 때
             return true;
@@ -138,8 +168,9 @@ class OrderProvider with ChangeNotifier {
         // checkQtyFromServer(data);
         return true;
       },
-      onDone: (String data) {
+      onDone: (String data) async {
         print('------- onDone: $data');
+        isSuccess = true;
       },
     );
   }

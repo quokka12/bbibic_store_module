@@ -1,3 +1,4 @@
+import 'package:bbibic_store/theme/app_sizes.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,13 +22,23 @@ class CartItemListWidget extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Column(
             children: [
-              for (int i = 0; i < cartProvider.goodsList.length; i++)
-                _cardHelper(
-                    context, cartProvider, cartProvider.goodsList[i], i),
+              cartProvider.goodsList.isEmpty
+                  ? const SizedBox()
+                  : itemListHelper(context, cartProvider),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget itemListHelper(BuildContext context, CartProvider cartProvider) {
+    return Column(
+      children: [
+        for (int i = 0; i < cartProvider.goodsList.length; i++) ...[
+          _cardHelper(context, cartProvider, cartProvider.goodsList[i], i)
+        ]
+      ],
     );
   }
 
@@ -66,9 +77,12 @@ class CartItemListWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${goods.goodsName}",
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.blackColorS2Bold),
+                    SizedBox(
+                      width: AppSizes.ratioOfHorizontal(context, 1) - 196,
+                      child: Text("${goods.goodsName}",
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.blackColorS2Bold),
+                    ),
                     Text(FormatUtil.priceFormat(goods.goodsPrice!),
                         style: AppTextStyles.blackColorB2),
                     Row(

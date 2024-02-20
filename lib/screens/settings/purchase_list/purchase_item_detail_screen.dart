@@ -27,98 +27,105 @@ class PurchaseItemDetailScreen extends StatelessWidget {
   Widget goodsListHelper(BuildContext context) {
     final orderProvider = Provider.of<OrderProvider>(context);
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20),
-              Text(
-                "받는 사람",
-                style: AppTextStyles.blackColorB1Bold,
-              ),
-              SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: AppDecorations.buttonDecoration(Colors.white),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(orderProvider.order.recipientName,
-                        style: AppTextStyles.blackColorS2Bold),
-                    SizedBox(height: 4),
-                    Text(orderProvider.order.recipientPhone,
-                        style: AppTextStyles.blackColorB2),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Text("배송지 정보", style: AppTextStyles.blackColorB1Bold),
-              SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: AppDecorations.buttonDecoration(Colors.white),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            "${orderProvider.order.recipientAddress["addressName"]}",
-                            style: AppTextStyles.blackColorS2Bold)
-                      ],
-                    ),
-                    SizedBox(height: 4),
-                    Text("${orderProvider.order.recipientAddress["address"]}",
-                        style: AppTextStyles.blackColorB2),
-                    Text(
-                        "${orderProvider.order.recipientAddress["detailedAddress"]}",
-                        style: AppTextStyles.blackColorB2),
-                    SizedBox(height: 4),
-                    Text(
-                        "공동 현관 비밀번호 : ${FormatUtil.securityFormat("${orderProvider.order.recipientAddress["securityCode"]}")}",
-                        style: AppTextStyles.grey600ColorC1),
-                    SizedBox(height: 12),
-                    Text("추가 요청사항 : ${orderProvider.order.request}",
-                        style: AppTextStyles.grey600ColorC1),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            Text(
+              "받는 사람",
+              style: AppTextStyles.blackColorB1Bold,
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: AppDecorations.buttonDecoration(Colors.white),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "주문 상품",
-                    style: AppTextStyles.blackColorB1Bold,
+                  Text(orderProvider.order.recipientName,
+                      style: AppTextStyles.blackColorS2Bold),
+                  const SizedBox(height: 4),
+                  Text(orderProvider.order.recipientPhone,
+                      style: AppTextStyles.blackColorB2),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text("배송지 정보", style: AppTextStyles.blackColorB1Bold),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: AppDecorations.buttonDecoration(Colors.white),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "${orderProvider.order.recipientAddress["addressName"]}",
+                          style: AppTextStyles.blackColorS2Bold)
+                    ],
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(height: 4),
+                  Text("${orderProvider.order.recipientAddress["address"]}",
+                      style: AppTextStyles.blackColorB2),
                   Text(
-                    "${orderProvider.order.goodsList.length}",
-                    style: AppTextStyles.bbibicColorS1Bold,
-                  )
+                      "${orderProvider.order.recipientAddress["detailedAddress"]}",
+                      style: AppTextStyles.blackColorB2),
+                  const SizedBox(height: 4),
+                  Text(
+                      "공동 현관 비밀번호 : ${FormatUtil.securityFormat("${orderProvider.order.recipientAddress["securityCode"]}")}",
+                      style: AppTextStyles.grey600ColorC1),
+                  const SizedBox(height: 12),
+                  Text("추가 요청사항 : ${orderProvider.order.request}",
+                      style: AppTextStyles.grey600ColorC1),
                 ],
               ),
-              SizedBox(height: 8),
-              for (int i = 0;
-                  i < orderProvider.order.goodsList.length;
-                  i++) ...[
-                _cardHelper(context, orderProvider, i),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "주문 상품",
+                  style: AppTextStyles.blackColorB1Bold,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "${orderProvider.order.goodsList.length}",
+                  style: AppTextStyles.bbibicColorS1Bold,
+                )
               ],
-              Row(
-                children: [
-                  Text("총 결제 금액", style: AppTextStyles.blackColorB2),
-                  const Spacer(),
-                  Text(FormatUtil.priceFormat(orderProvider.order.totalPrice),
-                      style: AppTextStyles.blackColorH1Bold),
-                ],
-              ),
+            ),
+            const SizedBox(height: 8),
+            for (int i = 0; i < orderProvider.order.goodsList.length; i++) ...[
+              _cardHelper(context, orderProvider, i),
             ],
-          ),
-        ));
+            Row(
+              children: [
+                Text("총 결제 금액", style: AppTextStyles.blackColorB2),
+                const Spacer(),
+                Text(FormatUtil.priceFormat(orderProvider.order.totalPrice),
+                    style: AppTextStyles.blackColorH1Bold),
+              ],
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "주문 취소 신청",
+                style: AppTextStyles.underlineGrey600C1,
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _cardHelper(
@@ -137,23 +144,22 @@ class PurchaseItemDetailScreen extends StatelessWidget {
               height: 100,
               fit: BoxFit.contain,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(orderProvider.order.goodsList[index]["goodsName"]!,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.blackColorS2Bold),
-                    Text(
-                        FormatUtil.priceFormat(orderProvider
-                            .order.goodsList[index]["goodsPrice"]!),
-                        style: AppTextStyles.blackColorB2),
-                  ],
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(orderProvider.order.goodsList[index]["goodsName"]!,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.blackColorS2Bold),
+                  Text(
+                      FormatUtil.priceFormat(
+                          orderProvider.order.goodsList[index]["goodsPrice"]!),
+                      style: AppTextStyles.blackColorB2),
+                ],
+              ),
             ),
+            Text("${orderProvider.order.goodsList[index]["count"]}개"),
+            const SizedBox(width: 12),
           ],
         ),
       ),

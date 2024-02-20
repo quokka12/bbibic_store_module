@@ -15,6 +15,7 @@ class RouteNames {
   static const goodsList = 'goodsList';
   static const goodsSearch = 'goodsSearch';
   static const payment = 'payment';
+  static const paymentInProgress = 'paymentInProgress';
   static const paymentSuccess = 'paymentSuccess';
   static const paymentSuccessAnimation = 'paymentSuccessAnimation';
   static const purchaseList = 'purchaseList';

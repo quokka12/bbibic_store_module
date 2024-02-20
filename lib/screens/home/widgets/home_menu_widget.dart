@@ -1,6 +1,8 @@
 import 'package:bbibic_store/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../configs/router/route_names.dart';
 import '../../../theme/app_assets.dart';
 import '../../../theme/app_text_styles.dart';
 
@@ -17,6 +19,23 @@ class HomeMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Function()?> onTapPage = [
+      () {
+        context.push("/${RouteNames.goodsList}/asd/인기순");
+      },
+      () {
+        context.push("/${RouteNames.goodsList}/asd/인기순");
+      },
+      () {
+        context.push("/${RouteNames.goodsList}/asd/인기순");
+      },
+      () {
+        context.push("/${RouteNames.goodsList}/asd/인기순");
+      },
+      () {
+        context.push("/${RouteNames.goodsList}/asd/인기순");
+      },
+    ];
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
       color: Colors.white,
@@ -25,25 +44,28 @@ class HomeMenuWidget extends StatelessWidget {
         children: [
           for (int i = 0; i < menuList.length; i++) ...[
             Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: AppColors.grey150,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Image.asset(
-                      menuList[i]["image"],
-                      width: 36,
-                      fit: BoxFit.contain,
+              child: GestureDetector(
+                onTap: onTapPage[i],
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: AppColors.grey150,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Image.asset(
+                        menuList[i]["image"],
+                        width: 36,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    menuList[i]["title"],
-                    style: AppTextStyles.grey800ColorB1,
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      menuList[i]["title"],
+                      style: AppTextStyles.grey800ColorB1,
+                    ),
+                  ],
+                ),
               ),
             ),
           ]

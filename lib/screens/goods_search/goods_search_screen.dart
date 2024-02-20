@@ -10,7 +10,9 @@ class GoodsSearchScreen extends StatelessWidget {
   List<String> searchs = ['칼슘', '영양제', '유산균', '비타민D', '눈건강', '간건강'];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Column(
@@ -93,15 +95,11 @@ class GoodsSearchScreen extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      content,
-                                      style: AppTextStyles.grey600ColorC1,
-                                    ),
-                                    SizedBox(width: 8),
-                                  ],
+                                Text(
+                                  "#$content",
+                                  style: AppTextStyles.grey600ColorC1,
                                 ),
+                                SizedBox(width: 4),
                                 Icon(Icons.close,
                                     size: 20, color: AppColors.grey600)
                               ],
@@ -115,6 +113,8 @@ class GoodsSearchScreen extends StatelessWidget {
               )
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -26,7 +26,6 @@ class _CartScreenState extends State<CartScreen> {
               context,
               '장바구니',
               () {
-                cartProvider.clear();
                 context.pop();
               },
             ),
